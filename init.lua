@@ -1,20 +1,17 @@
 -- mod-version:3
 local core = require "core"
 local command = require "core.command"
+local config = require "core.config"
 local keymap = require "core.keymap"
 local DocView = require "core.docview"
 local CommandView = require "core.commandview"
 
 -- Configuration parameters
-config.plugins.ptm = common.merge({
-  -- ?
-}, config.plugins.ptm)
+config.plugins.ptm = {}
 
--- ?
-local ProjectTemplateManager = {}
-
--- Generate selected template
+-- WIP: formal docs
 local function template_generation()
+	-- foreach loop, loops for all multiline strings inside ? table located ?
 	-- create variables
 	local wd = os.execute("pwd")
 	local dirname = "ex0"  -- TODO: get and assign dirname from input box
@@ -32,47 +29,48 @@ local function template_generation()
   file:close()
 end
 
--- Assign template from user input
+-- WIP: formal docs
 local template_selection = function()
 	-- Switch-case function implementation
     local switch = function(t)
         local case = {
         -- C++ simple
         ["cpp-simple"] = function()
-            print("...")
+          print("...")
+          --template_generation()
         end,
         -- Java simple
         ["java-simple"] = function()
-            print("...")
+          print("...")
         end,
         -- Arch Linux's PKGBUILD
         ["pkbuild"] = function()
-            print("...")
+          print("...")
         end,
+        -- ?
         default = function()
-            print("Your input didn't match any of the predefined templates.")
+          print("Your input didn't match any of the predefined templates.")
         end,
         }
+        -- ?
         if case[t] then
-            case[t]()
+          case[t]()
         else
-            case["default"]()
+          case["default"]()
         end
     end
     switch(t)
 end
 
 -- Commands
-command.add("core.docview!", {
+command.add(nil, {
   ["ptm:choose-template"] = function ()
-    -- Create a command view to insert the template name (study the change-project function)
-    core.command_view:enter("Choose template:", {
-      -- Get the input text
-      input_text = "",
-      -- Template assignment
-      local template = template_selection(input_text),
-      -- Template generation
-      template_generation(template)
+    -- Get the input text
+    core.command_view:enter("Choose template", {
+      submit = function(text)
+        print(text)
+        template_selection(text)
+      end
     })
   end
 })

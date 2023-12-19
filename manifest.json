@@ -2,20 +2,10 @@
   "addons": [
     {
       "id": "ptm",
-      "version": "0.0.1",
+      "name": "Project Template Manager",
       "description": "A plugin for Lite XL that generates project templates for programming languages and frameworks.",
-      "path": "plugins/ptm",
-      "mod_version": "3",
-      "provides": [
-        "ptm"
-      ],
-      "files": [
-        {
-          "url": "https://github.com/PerilousBooklet/lite-xl-ptm",
-          "arch": "x86_64-linux",
-          "checksum": ""
-        }
-      ]
+      "version": "0.0.1",
+      "mod_version": "3"
     }
   ]
 }

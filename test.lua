@@ -1,4 +1,0 @@
--- lpm lite-xl
--- lpm repo
--- lpm repo add ~/dev/lite-xl/lite-xl-ptm
--- lpm run --ephemeral ~/dev/lite-xl/lite-xl-ptm ptm
