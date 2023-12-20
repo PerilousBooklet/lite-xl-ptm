@@ -7,15 +7,16 @@ local DocView = require "core.docview"
 local CommandView = require "core.commandview"
 
 -- Configuration parameters
+-- TODO: implement way to add template files from the user's init.lua
 config.plugins.ptm = {}
 
--- WIP: formal docs
-local function template_generation()
-	-- foreach loop, loops for all multiline strings inside ? table located ?
-	-- create variables
+-- TODO: formal docs
+-- Template generation
+local function template_generation(text, title)
+	-- for-each loop, loops for all multiline strings inside template table
 	local wd = os.execute("pwd")
-	local dirname = "ex0"  -- TODO: get and assign dirname from input box
-	local filename = "ex0.sh"
+	local dirname = t
+	local filename = t .. ".sh"
 	-- get project directory name from command.view input
 	-- check if there is a directory with the same name as the one from user input; if there is, refuse further instructions
 	-- create directory
@@ -29,23 +30,25 @@ local function template_generation()
   file:close()
 end
 
--- WIP: formal docs
-local template_selection = function()
+-- TODO: formal docs
+-- Template selection
+local template_selection = function(t)
 	-- Switch-case function implementation
     local switch = function(t)
         local case = {
         -- C++ simple
         ["cpp-simple"] = function()
-          print("...")
+          print("cpp")
+          -- Create template from template description file located in ./templates
           --template_generation()
         end,
         -- Java simple
         ["java-simple"] = function()
-          print("...")
+          print("java")
         end,
         -- Arch Linux's PKGBUILD
-        ["pkbuild"] = function()
-          print("...")
+        ["pkgbuild-simple"] = function()
+          print(t)
         end,
         -- ?
         default = function()
@@ -62,16 +65,27 @@ local template_selection = function()
     switch(t)
 end
 
+local project_template_manager = function()
+  -- TODO: Implement template name suggestions list above command view
+  -- Get the input text for the template name
+  core.command_view:enter("Choose template", {
+    submit = function(text)
+      -- Get the input text for the project title
+      core.command_view:enter("Choose project title", {
+        submit = function(title)
+          print(title)
+        end
+      })
+      -- Submit chosen template for selection
+      template_selection(text)
+    end
+  })
+end
+
 -- Commands
 command.add(nil, {
   ["ptm:choose-template"] = function ()
-    -- Get the input text
-    core.command_view:enter("Choose template", {
-      submit = function(text)
-        print(text)
-        template_selection(text)
-      end
-    })
+    project_template_manager()
   end
 })
 
