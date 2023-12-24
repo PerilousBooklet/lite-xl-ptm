@@ -12,35 +12,40 @@ config.plugins.ptm = {}
 
 -- TODO: formal docs
 -- Template generation
-local function template_generation(text, title)
-	-- for-each loop, loops for all multiline strings inside template table
+local function template_generation(title)
 	local wd = os.execute("pwd")
-	local dirname = t
-	local filename = t .. ".sh"
-	-- get project directory name from command.view input
-	-- check if there is a directory with the same name as the one from user input; if there is, refuse further instructions
-	-- create directory
+	local dirname = title
+	-- TODO: Windows/Mac/Linux support (check which operating system is running)
+	-- TODO: check if there is a directory with the same name as the one from user input; if there is, refuse further instructions
+	-- Create the project directory
   os.execute("mkdir " .. wd .. dirname)
-	-- create the specified files
+	-- Create the files
+  -- TODO: get files list (each file is assigned a string of text to contain)
+  -- TODO: write iterator to create and fill files
+  
+  -- Example
+  local filename = "main.sh"
   os.execute("touch " .. wd .. "/" .. dirname .. "/" .. filename) -- TODO: get and assign filename from template .lua file
-	-- write to the files the contents of the multi-line string tables
+	-- TODO: get and assign multi-line strings from template .lua file
+	-- TODO: write to the files the contents of the multi-line string tables
 	local file = io.open(wd .. "/" .. dirname .. "/" .. filename, "w")
-  local mls = "#!/bin/bash"  -- example
-  file:write(mls) -- TODO: get and assign multi-line strings from template .lua file
+  local mls = "#!/bin/bash"
+  file:write(mls)
   file:close()
 end
 
 -- TODO: formal docs
 -- Template selection
-local template_selection = function(t)
+local template_selection = function(t, title)
 	-- Switch-case function implementation
     local switch = function(t)
         local case = {
         -- C++ simple
         ["cpp-simple"] = function()
-          print("cpp")
+          print(t)
+          print(title)
           -- Create template from template description file located in ./templates
-          --template_generation()
+          template_generation(title)
         end,
         -- Java simple
         ["java-simple"] = function()
@@ -50,12 +55,13 @@ local template_selection = function(t)
         ["pkgbuild-simple"] = function()
           print(t)
         end,
-        -- ?
+        -- Default case
         default = function()
-          print("Your input didn't match any of the predefined templates.")
+          -- TODO: spawn warning in status bar
+          print("WARNING: the input didn't match any of the predefined templates!")
         end,
         }
-        -- ?
+        -- Selection logic
         if case[t] then
           case[t]()
         else
@@ -65,6 +71,7 @@ local template_selection = function(t)
     switch(t)
 end
 
+-- ?
 local project_template_manager = function()
   -- TODO: Implement template name suggestions list above command view
   -- Get the input text for the template name
@@ -73,11 +80,10 @@ local project_template_manager = function()
       -- Get the input text for the project title
       core.command_view:enter("Choose project title", {
         submit = function(title)
-          print(title)
+          -- Submit chosen template for selection
+          template_selection(text, title)
         end
       })
-      -- Submit chosen template for selection
-      template_selection(text)
     end
   })
 end

@@ -1,7 +1,4 @@
--- code blocks are stored inside multi-line strings
--- code blocks are to be written inside generated files
-
-local hello_world = [[
+local main = [[
 #include<iostream>;
 
 using namespace std;
@@ -12,15 +9,12 @@ int main()
 }
 ]]
 
-local build = [[
-
-]]
-
 local run = [[
+#!/bin/bash
 
+# Compile
+g++ main.cpp -o ./bin/main
+
+# Run
+./bin/main
 ]]
-
--- comprehensive table that contains the references to all tables that template_generator needs to generate and fill the files
-local main = {
-  -- ?
-}
