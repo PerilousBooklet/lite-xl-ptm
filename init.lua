@@ -13,24 +13,27 @@ config.plugins.ptm = {}
 -- TODO: formal docs
 -- Template generation
 local function template_generation(title)
+	local dir = title
 	local wd = os.execute("pwd")
-	local dirname = title
 	-- TODO: Windows/Mac/Linux support (check which operating system is running)
 	-- TODO: check if there is a directory with the same name as the one from user input; if there is, refuse further instructions
-	-- Create the project directory
-  os.execute("mkdir " .. wd .. dirname)
-	-- Create the files
+	
+	-- Create project directory
+	system.mkdir(wd .. dir)
+  
+	-- Create files
   -- TODO: get files list (each file is assigned a string of text to contain)
   -- TODO: write iterator to create and fill files
-  
-  -- Example
-  local filename = "main.sh"
-  os.execute("touch " .. wd .. "/" .. dirname .. "/" .. filename) -- TODO: get and assign filename from template .lua file
-	-- TODO: get and assign multi-line strings from template .lua file
+  local filename
+  -- TODO: get and assign filename from template file
+	-- TODO: get and assign multi-line strings from template file
 	-- TODO: write to the files the contents of the multi-line string tables
-	local file = io.open(wd .. "/" .. dirname .. "/" .. filename, "w")
-  local mls = "#!/bin/bash"
-  file:write(mls)
+  os.execute("touch " .. wd .. "/" .. dir .. "/" .. filename)
+	local file = io.open(wd .. "/" .. dir .. "/" .. filename, "w")
+  
+  local string = ""
+  file:write(string)
+  
   file:close()
 end
 
@@ -42,8 +45,6 @@ local template_selection = function(t, title)
         local case = {
         -- C++ simple
         ["cpp-simple"] = function()
-          print(t)
-          print(title)
           -- Create template from template description file located in ./templates
           template_generation(title)
         end,
@@ -96,4 +97,4 @@ command.add(nil, {
 })
 
 -- Key bindings
-keymap.add { ["shift+alt+p"] = "ptm:choose-template" }
+--keymap.add { ["ctrl+shift+alt+p"] = "ptm:choose-template" }

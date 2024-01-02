@@ -3,7 +3,7 @@
     {
       "id": "ptm",
       "name": "Project Template Manager",
-      "description": "A plugin for Lite XL that generates project templates for programming languages and frameworks.",
+      "description": "A plugin for Lite XL that generates project templates for programming languages, frameworks and tools.",
       "version": "0.0.1",
       "mod_version": "3"
     }
