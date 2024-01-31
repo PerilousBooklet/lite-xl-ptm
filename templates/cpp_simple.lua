@@ -1,4 +1,4 @@
-main = [[
+local main = [[
 #include<iostream>;
 
 using namespace std;
@@ -9,7 +9,7 @@ int main()
 }
 ]]
 
-build = [[
+local build = [[
 #!/usr/bin/bash
 
 # Compile
@@ -19,7 +19,10 @@ g++ main.cpp -o ./bin/main
 ./bin/main
 ]]
 
-items = {
-  main = "main.cpp",
-  build = "build.sh"
+local directories = {}
+
+-- TODO: exec files need a true/false variable
+local files = {
+  ["main.cpp"] = main,
+  ["build.sh"] = build
 }

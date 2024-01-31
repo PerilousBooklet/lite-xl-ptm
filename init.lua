@@ -8,76 +8,76 @@ local keymap = require "core.keymap"
 -- TODO: implement a way to add template files from the user's init.lua
 config.plugins.ptm = {}
 
--- Import template description files
-local templates = require "templates.cpp_simple"
+-- Constants
+local mlstring = [[
+#!/bin/bash
+echo "It works!"
+]]
 
--- TODO: formal docs
 -- Template generation
-local function template_generation(title)
-	local dir = title
-	local wd = system.absolute_path(".") -- Get absolute path of current working directory
+-- TODO: formal docs
+local function template_generation(dir)
+  local wd = system.absolute_path(".") -- Get absolute path of current working directory
 	
-	-- TODO: check if there is a directory with the same name as the one from user input; if there is, refuse further instructions
-	
-	-- Create project directory
+	-- Create directories
+	-- TODO: automate directory creation
 	system.mkdir(wd .. "/" .. dir)
   
-  -- TODO: get and assign filename from template file
-	-- TODO: get and assign multi-line strings from template file
-  -- TODO: get files list (each file is assigned a string of text to contain)
-  -- TODO: write iterator to create and fill files
-	-- TODO: write to the files the contents of the multi-line string tables
-	-- TODO: create additional directories inside template directory
-	-- TODO: add adamharrison/lite-xl-ide build plugin configuration file
 	-- Create files
-  local filename = "abcd.sh"
-	local file = io.open(wd .. "/" .. dir .. "/" .. filename, "w")
-  -- Write file contents
-  file:write(cpp_simple.build)
-  file:close()
+	-- TODO: automate file creation
+	-- TODO: add platform-specific exec permission assignments
+  local file = "abcd.sh"
+  local f = io.open(wd .. "/" .. dir .. "/" .. file, "w")
+  f:write(mlstring)
+  f:close()
+  print("Template generation works!")
+
+  -- Run commands
+  -- ?
 end
 
--- TODO: formal docs
 -- Template selection
+-- TODO: formal docs
 local template_selection = function(t, title)
-	-- Switch-case function implementation
-  local switch = function(t)
-    local case = {
-    -- C++ simple
-    ["cpp_simple"] = function()
-      -- TODO: get files table
-      -- TODO: get files table entry number
-      -- Create template from template description file located in ./templates
-      print(title)
-      template_generation(title)
-    end,
-    -- Java simple
-    ["java-simple"] = function()
-      print("java")
-    end,
-    -- Arch Linux's PKGBUILD
-    ["pkgbuild-simple"] = function()
-      print(t)
-    end,
-    -- Default case
-    default = function()
-      -- TODO: spawn warning in status view
-      print("WARNING: the input didn't match any of the predefined templates!")
-    end,
-    }
-    -- Selection logic
-    if case[t] then
-      case[t]()
-    else
-      case["default"]()
+	-- Check if directory already exists
+	local wd = system.absolute_path(".") -- Get absolute path of current working directory
+	local fi = system.get_file_info(wd .. "/" .. title)
+	if fi == nil then
+    print("Directory already exists!")
+	else
+    -- Switch-case selection implementation
+    local switch = function(t)
+      local case = {
+      ["cpp_simple"] = function()
+        -- TODO: get files table
+        -- TODO: get files table entry number
+        -- Create template from template description file located in ./templates
+        template_generation(title)
+        print("Template selection works")
+      end,
+      ["java_simple"] = function()
+        print(t)
+      end,
+      ["pkgbuild_simple"] = function()
+        print(t)
+      end,
+      default = function()
+        -- TODO: spawn warning in status view
+        print("WARNING: the input didn't match any of the predefined templates!")
+      end
+      }
+      if case[t] then
+        case[t]()
+      else
+        case["default"]()
+      end
     end
+    switch(t)
   end
-  switch(t)
 end
 
--- ?
+-- Main function
 local project_template_manager = function()
-  -- TODO: Implement template name suggestions list above command view
   -- Get input text for template name
   core.command_view:enter("Choose template", {
     submit = function(text)
@@ -89,8 +89,9 @@ local project_template_manager = function()
         end
       })
     end,
+    -- Suggestions for template names
     suggest = function()
-    	-- TODO: return suggestions as names of files inside ./templates folder
+    	-- TODO: return suggestions as names of files contained in ./templates folder
       -- TODO: filter suggestions matching already entered characters (es. common.fuzzy_match)
     	--return ?
     end
