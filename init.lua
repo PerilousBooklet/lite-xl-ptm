@@ -8,46 +8,35 @@ local keymap = require "core.keymap"
 -- TODO: implement a way to add template files from the user's init.lua
 config.plugins.ptm = {}
 
+-- Templates
+--require("./templates/cpp_simple")
+
 -- Constants
+local wd = system.absolute_path(".") -- Get absolute path of current working directory
 local mlstring = [[
 #!/bin/bash
 echo "It works!"
 ]]
 
 -- Template generation
--- TODO: formal docs
-local function template_generation(dir)
-  local wd = system.absolute_path(".") -- Get absolute path of current working directory
-	
+local function template_generation(dir)	
 	-- Create directories
 	-- TODO: automate directory creation
 	system.mkdir(wd .. "/" .. dir)
   
 	-- Create files
 	-- TODO: automate file creation
-	-- TODO: add platform-specific exec permission assignments
   local file = "abcd.sh"
   local f = io.open(wd .. "/" .. dir .. "/" .. file, "w")
-  f:write(mlstring)
+  f:write(build)
   f:close()
-  print("Template generation works!")
-
-  -- Run commands
-  -- ?
 end
 
 -- Template selection
--- TODO: formal docs
 local template_selection = function(t, title)
-	-- Check if directory already exists
-	local wd = system.absolute_path(".") -- Get absolute path of current working directory
-	local fi = system.get_file_info(wd .. "/" .. title)
-	if fi == nil then
-    print("Directory already exists!")
-	else
-    -- Switch-case selection implementation
-    local switch = function(t)
-      local case = {
+  -- Switch-case selection implementation
+  local switch = function(t)
+    local case = {
       ["cpp_simple"] = function()
         -- TODO: get files table
         -- TODO: get files table entry number
@@ -73,7 +62,6 @@ local template_selection = function(t, title)
       end
     end
     switch(t)
-  end
 end
 
 -- Main function
@@ -84,8 +72,13 @@ local project_template_manager = function()
       -- Get input text for project folder title
       core.command_view:enter("Choose project title", {
         submit = function(title)
-          -- Submit chosen template for selection
-          template_selection(text, title)
+          -- Check if folder already exists
+          if system.get_file_info(wd .. title) == nil then
+            -- Submit chosen template for selection
+            template_selection(text, title)
+          else
+            print("WARNING: a folder with this title already exists!")
+          end
         end
       })
     end,
