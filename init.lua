@@ -5,14 +5,12 @@ local config = require "core.config"
 local keymap = require "core.keymap"
 
 -- Configuration parameters
--- TODO: implement a way to add template files from the user's init.lua
-config.plugins.ptm = {}
-
--- Templates
---require("./templates/cpp_simple")
+config.plugins.ptm = common.merge({
+  -- ?
+}, config.plugins.ptm)
 
 -- Constants
-local wd = system.absolute_path(".") -- Get absolute path of current working directory
+local wd = system.absolute_path(".")
 local mlstring = [[
 #!/bin/bash
 echo "It works!"
@@ -20,15 +18,13 @@ echo "It works!"
 
 -- Template generation
 local function template_generation(dir)	
-	-- Create directories
-	-- TODO: automate directory creation
+	-- Create directory
 	system.mkdir(wd .. "/" .. dir)
   
-	-- Create files
-	-- TODO: automate file creation
+	-- Create file
   local file = "abcd.sh"
   local f = io.open(wd .. "/" .. dir .. "/" .. file, "w")
-  f:write(build)
+  f:write(mlstring)
   f:close()
 end
 
@@ -37,22 +33,11 @@ local template_selection = function(t, title)
   -- Switch-case selection implementation
   local switch = function(t)
     local case = {
-      ["cpp_simple"] = function()
-        -- TODO: get files table
-        -- TODO: get files table entry number
-        -- Create template from template description file located in ./templates
+      ["cpp-simple"] = function()
         template_generation(title)
-        print("Template selection works")
-      end,
-      ["java_simple"] = function()
-        print(t)
-      end,
-      ["pkgbuild_simple"] = function()
-        print(t)
       end,
       default = function()
-        -- TODO: spawn warning in status view
-        print("WARNING: the input didn't match any of the predefined templates!")
+        core.log_quiet({"WARNING: the input didn't match any of the predefined templates!"})
       end
       }
       if case[t] then

@@ -1,1 +1,0 @@
--- project init command: mix new project_name --module module_name
