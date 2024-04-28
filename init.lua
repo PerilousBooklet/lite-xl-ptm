@@ -10,20 +10,30 @@ config.plugins.ptm = common.merge({
   -- ?
 }, config.plugins.ptm)
 
+local ptm = {}
+
 -- Constants
 local wd = system.absolute_path(".")
-local mlstring = [[
+local file_cpp = "abcd.sh"
+local string_cpp = [[
 #!/bin/bash
 echo "It works!"
 ]]
+local file_java = "defg.java"
+local string_java = [[
+class Main {
+  public static void main (String[] args) {
+    system.out.println("Hello world!")
+  }
+}
+]]
 
 -- Template generation
-local function template_generation(dir)	
+local function template_generation(dir, file, mlstring)	
 	-- Create directory
 	system.mkdir(wd .. "/" .. dir)
   
 	-- Create file
-  local file = "abcd.sh"
   local f = io.open(wd .. "/" .. dir .. "/" .. file, "w")
   f:write(mlstring)
   f:close()
@@ -35,7 +45,10 @@ local template_selection = function(t, title)
   local switch = function(t)
     local case = {
       ["cpp-simple"] = function()
-        template_generation(title)
+        template_generation(title, file_cpp, string_cpp)
+      end,
+      ["java-simple"] = function()
+        template_generation(title, file_java, string_java)
       end,
       default = function()
         core.log_quiet({"WARNING: the input didn't match any of the predefined templates!"})
@@ -87,4 +100,11 @@ command.add(nil, {
 -- Key bindings
 keymap.add {
   ["alt+p"] = "ptm:choose-template"
+}
+
+-- This allows Lite XL to automatically add all templates info (from ./templates) to the ptm table
+return {
+  add_template = function (template)
+  	table.insert(ptm, template)
+  end
 }

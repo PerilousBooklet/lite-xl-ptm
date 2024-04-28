@@ -5,8 +5,7 @@
       "name": "Project Template Manager",
       "description": "A plugin for Lite XL that generates project templates.",
       "version": "0.0.1",
-      "mod_version": "3",
-      "remote": "https://github.com/PerilousBooklet/lite-xl-ptm:main"
+      "mod_version": "3"
     }
   ]
 }
