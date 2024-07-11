@@ -2,7 +2,24 @@
 A plugin for Lite XL that generates project templates for programming languages, frameworks and tools.
 
 ## Features
-- [ ] Project template generation
-- [ ] File template generation (e.g. tmux run script, docker compose run script)
+- [ ] Command-view suggestion with fuzzy match for project template names
 - [ ] Integration with `lsp` plugin: add LSP server config files when necessary
-- [ ] Integration with `build` plugin: run build framework commands
+- [ ] Immediately after a project template has been generated, a new tab opens, containing a brief description of the necessary shell commands to be run in the terminal to finish setting up the project template.
+- [ ] Add deps download and setup (es. Minecraft Forge SDK + Minecraft source code + obfuscation mappings)
+- [ ] List of templates
+  - [ ] C, make
+  - [ ] C, cmake
+  - [ ] C, meson
+  - [ ] Java, maven
+  - [ ] Java, gradle
+  - [ ] LaTeX
+  - [ ] Minecraft Forge
+  - [ ] Minecraft Fabric
+  - [ ] 
+  - [ ] 
+  - [ ] 
+  - [ ] 
+  - [ ] 
+  - [ ] 
+  - [ ] 
+  - [ ] 

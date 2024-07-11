@@ -12,13 +12,17 @@ config.plugins.ptm = common.merge({
 
 local ptm = {}
 
+-- TODO: write function to merge template tables
+
 -- Constants
 local wd = system.absolute_path(".")
+
 local file_cpp = "abcd.sh"
 local string_cpp = [[
 #!/bin/bash
 echo "It works!"
 ]]
+
 local file_java = "defg.java"
 local string_java = [[
 class Main {
@@ -29,7 +33,8 @@ class Main {
 ]]
 
 -- Template generation
-local function template_generation(dir, file, mlstring)	
+local function template_generation(dir, file, mlstring)
+	-- WIP: iterative selected template components generation
 	-- Create directory
 	system.mkdir(wd .. "/" .. dir)
   
@@ -41,10 +46,11 @@ end
 
 -- Template selection
 local template_selection = function(t, title)
+  -- WIP: interative check for selected template name
   -- Switch-case selection implementation
   local switch = function(t)
     local case = {
-      ["cpp-simple"] = function()
+      ["c-simple"] = function()
         template_generation(title, file_cpp, string_cpp)
       end,
       ["java-simple"] = function()
