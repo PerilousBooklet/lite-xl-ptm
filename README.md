@@ -12,14 +12,7 @@ A plugin for Lite XL that generates project templates for programming languages,
   - [ ] C, meson
   - [ ] Java, maven
   - [ ] Java, gradle
+  - [ ] Python virtual environment
   - [ ] LaTeX
   - [ ] Minecraft Forge
   - [ ] Minecraft Fabric
-  - [ ] 
-  - [ ] 
-  - [ ] 
-  - [ ] 
-  - [ ] 
-  - [ ] 
-  - [ ] 
-  - [ ] 
