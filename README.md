@@ -1,5 +1,5 @@
 # Project Template Manager
-A plugin for Lite XL that generates project templates for programming languages, frameworks and tools.
+A plugin for Lite XL that generates project templates for programming languages and frameworks.
 
 ## Features
 - [ ] Command-view suggestion with fuzzy match for project template names
