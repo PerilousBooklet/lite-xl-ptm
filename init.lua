@@ -1,4 +1,4 @@
--- mod-version:3
+-- mod-version:3 lite-xl 2.1
 local core = require "core"
 local command = require "core.command"
 local common = require "core.common"
@@ -12,64 +12,55 @@ config.plugins.ptm = common.merge({
 
 local ptm = {}
 local wd = system.absolute_path(".")
-local templates = {
-  ["prova"] = {
-    files = {
-      ["file1.txt"] = {
-        path = "/" .. "dir1" .. "/" .. "dir1_1",
-        content = [[
-[intro]
-text = \"This is the file's content, a multi-line string.\"
-]]
-      }
-    },
-    dirs = {
-      "/" .. "dir2",
-      "/" .. "dir3"
-    },
-    commands = {
-      "echo Hello there!"
-    }
-  },
-}
 
--- TODO: write function to merge template tables
-local function add(template)
-  -- ...
+-- TODO: Add modular system to load external libraries
+-- TODO: Optimize external libraries visibility to LSP for go-to-definition, with a readonly open_doc() function
+-- TODO: Add auto-insert upon file-creation (es. Minecraft modding java files)
+-- TODO: use Adam's lite-xl-www to download dependencies in the functions that setup the external libraries
+-- TODO: add project-template-specific tab to explain manual steps / clarifications (based on WIP dashboard plugin)
+
+local function add_template(template)
+  common.merge(template, config.plugins.ptm)
 end
 
--- file creation function
-local function create_and_fill_file(dir, file, content)
+-- Creates and fills a file
+local function create_and_fill(title, dir, file, content)
 	-- Create directory where file resides
-	system.mkdir(wd .. "/" .. dir)
+	system.mkdir(wd .. "/" .. title .. "/" .. dir)
 	-- Create file
-	local f = io.open(wd .. "/" .. dir .. "/" .. file, "w")
+	local f = io.open(wd .. "/" .. title .. "/" .. dir .. "/" .. file, "w")
   f:write(content)
   f:close()
 end
 
 -- Template generation
-local function template_generation(template)
+local function template_generation(template, title)
 	-- Create and fill files
 	for key, file in pairs(template.files) do
-  	create_and_fill_file(file.path, file.name, file.content)
+  	create_and_fill(title, file.path, file.name, file.content)
   end
-  create_file(dir, file, content)
   -- Create directories
-  for key, dirname in ipairs(template.dirs) do
-  	system.mkdir(wd .. dir)
+  for key, dir in ipairs(template.dirs) do
+  	system.mkdir(wd .. "/" .. title .. "/" .. dir .. "/")
+  end
+  -- Download dependencies
+  for key, dep in ipairs(template.dependencies) do
+  	system.chdir(wd .. "/" .. title) -- Chanfe dir into project dir
+  	-- ...
   end
   -- Run commands
   for key, command in ipairs(template.commands) do
+  	system.chdir(wd .. "/" .. title) -- Chanfe dir into project dir
   	process.start(command)
   end
 end
 
 -- Template selection
-local function template_selection(t, title)
-  for key, value in pairs(templates) do
-    if key == title then
-    	template_generation(key)
+local function template_selection(template, title)
+  for key, value in pairs(config.plugins.ptm) do
+    if key == template then
+    	system.mkdir(wd .. title) -- Create project folder
+    	template_generation(title, template)
     end
   end
 end

@@ -16,3 +16,7 @@ A plugin for Lite XL that generates project templates for programming languages 
   - [ ] LaTeX
   - [ ] Minecraft Forge
   - [ ] Minecraft Fabric
+
+## Docs
+
+...
