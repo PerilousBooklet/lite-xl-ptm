@@ -2,10 +2,34 @@
   "addons": [
     {
       "id": "ptm",
+      "mod_version": "3",
       "name": "Project Template Manager",
-      "description": "A plugin for Lite XL that generates project templates.",
+      "description": "A project template manager for Lite XL.",
+      "path": "./ptm.lua",
+      "type": "plugin",
+      "version": "0.0.1"
+    },
+    {
+      "id": "ptm_example",
+      "mod_version": "3",
+      "name": "ptm_example",
+      "description": "A module for the Project Template Manager that adds an example project template.",
+      "path": "./ptm_example.lua",
+      "type": "plugin",
       "version": "0.0.1",
-      "mod_version": "3"
+      "dependencies": { "ptm": {} }
+    },
+    {
+      "id": "meta_ptm",
+      "mod_version": "3",
+      "description": "A metapackage containing all project templates from the ptm plugin.",
+      "type": "meta",
+      "version": "0.0.1",
+      "dependencies": {
+        "ptm": {},
+        "ptm_example": {},
+        "ptm_minecraft_forge_1_20_1": {}
+      }
     }
   ]
 }

@@ -1,2 +1,2 @@
 #!/usr/bin/bash
-lpm run --ephemeral ./ ptm
+lpm run --ephemeral ./ ptm ptm_example
