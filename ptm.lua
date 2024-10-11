@@ -5,17 +5,10 @@ local command = require "core.command"
 local common = require "core.common"
 local config = require "core.config"
 local keymap = require "core.keymap"
---local EmptyView = require "core.emptyview"
 
--- Configuration parameters
 config.plugins.ptm = common.merge({
   -- ?
 }, config.plugins.ptm)
-
--- Custom message view
--- use dashboard plugin ?
-
--- Template logic
 
 local templates = {}
 local wd = system.absolute_path(".")
@@ -24,7 +17,7 @@ local wd = system.absolute_path(".")
 local function get_template(template_name)
 	local template = nil
 	for _, v in pairs(templates) do
-		if template_name == v then
+		if template_name == v.name then
 			template = v
 		end
 	end
@@ -32,6 +25,7 @@ local function get_template(template_name)
 end
 
 -- TODO: add project-template-specific tab to explain manual steps / clarifications (use an EmptyView)
+-- ex. a gradle project requires interaction with the user
 
 -- Creates and fills a file
 local function create_and_fill(project_title, dir, file_name, file_content)
@@ -45,25 +39,25 @@ end
 local function template_generation(template_name, project_title, template_content)
 	-- Create and fill files
 	for key, file in pairs(template_content.files) do
-  	create_and_fill(project_title, file.path, template_name, file.content)
+  	create_and_fill(project_title, file.path, key, file.content)
   end
   -- Create directories
   for key, dir in pairs(template_content.dirs) do
   	system.mkdir(wd .. "/" .. project_title .. "/" .. dir .. "/")
   end
   -- Download external libraries
-  for key, dep in pairs(template_content.ext_libs) do
-  	system.chdir(wd .. "/" .. project_title)
+  for key, lib in pairs(template_content.ext_libs) do
+  	--system.chdir(wd .. "/" .. project_title .. "/" .. lib.dir)
   	-- TODO: use Adam's lite-xl-www to download dependencies
   end
   -- Crete and fill config files for the LSP server
   for key, file in pairs(template_content.lsp_config_files) do
-  	create_and_fill(project_title, file.path, file.name, file.content)
+  	create_and_fill(project_title, file.path, key, file.content)
   end
   -- Run commands
   for key, command in pairs(template_content.commands) do
-  	system.chdir(wd .. "/" .. project_title)
-  	process.start(command)
+  	--system.chdir(wd .. "/" .. project_title)
+  	--process.start(command)
   end
   -- Write template-specific message
   -- ?
@@ -71,9 +65,8 @@ end
 
 -- Template selection
 local function template_selection(template_name, project_title)
-  system.mkdir(wd .. "/" .. project_title)
+  system.mkdir(wd .. "/" .. project_title) -- Rn it stops here
   local template_content = get_template(template_name)
-  core.log_quiet(tostring(template_content))
   template_generation(template_name, project_title, template_content)
 end
 
@@ -108,14 +101,14 @@ end
 
 -- Commands
 command.add(nil, {
-  ["project-template-manager:choose-template"] = function ()
+  ["ptm:choose-template"] = function ()
     project_template_manager()
   end
 })
 
 -- Key bindings
 keymap.add {
-  ["alt+p"] = "project-template-manager:choose-template"
+  ["alt+p"] = "ptm:choose-template"
 }
 
 -- Filling the templates table (copied from the formatter plugin)
