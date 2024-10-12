@@ -33,11 +33,9 @@ ptm.add_template {
     ".ext_libs",
     ".dirr"
   },
-  commands = {
-    { "echo", "something something" }
-  },
   ext_libs = {
-    ["https://christitus.com/archtitus"] = {
+    ["localtube"] = {
+      file = "https://github.com/PerilousBooklet/localtube/archive/refs/heads/main.zip",
       dir = ".ext_libs"
     }
   },
@@ -46,6 +44,10 @@ ptm.add_template {
       path = ".dirr",
       content = file2
     }
+  },
+  commands = {
+    { "alacritty", "-e", "touch", "prova.txt" },
+    --{ "unzip", "main.zip", "-d", "localtube" }
   },
   message = {
     header = "This is a brief introduction about this example project template.",

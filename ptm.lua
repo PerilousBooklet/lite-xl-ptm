@@ -5,6 +5,9 @@ local command = require "core.command"
 local common = require "core.common"
 local config = require "core.config"
 local keymap = require "core.keymap"
+--local www = require "libraries.www"
+
+local ptm = {}
 
 config.plugins.ptm = common.merge({
   -- ?
@@ -35,29 +38,39 @@ local function create_and_fill(project_title, dir, file_name, file_content)
   f:close()
 end
 
+-- Download a file with lite-xl-www
+-- WIP: download function
+local function download_file(file)
+--	core.add_thread(function()
+--    local agent = www.new()
+--    print(agent:get(file))
+--    print(agent:post(file, "q=test"))
+--  end)
+end
+
 -- Template generation
 local function template_generation(template_name, project_title, template_content)
 	-- Create and fill files
-	for key, file in pairs(template_content.files) do
-  	create_and_fill(project_title, file.path, key, file.content)
+	for k, file in pairs(template_content.files) do
+  	create_and_fill(project_title, file.path, k, file.content)
   end
   -- Create directories
-  for key, dir in pairs(template_content.dirs) do
+  for k, dir in pairs(template_content.dirs) do
   	system.mkdir(wd .. "/" .. project_title .. "/" .. dir .. "/")
   end
   -- Download external libraries
-  for key, lib in pairs(template_content.ext_libs) do
-  	--system.chdir(wd .. "/" .. project_title .. "/" .. lib.dir)
-  	-- TODO: use Adam's lite-xl-www to download dependencies
+  for k, lib in pairs(template_content.ext_libs) do
+  	system.chdir(wd .. "/" .. project_title .. "/" .. lib.dir)
+  	download_file(lib.file)
   end
   -- Crete and fill config files for the LSP server
-  for key, file in pairs(template_content.lsp_config_files) do
-  	create_and_fill(project_title, file.path, key, file.content)
+  for k, file in pairs(template_content.lsp_config_files) do
+  	create_and_fill(project_title, file.path, k, file.content)
   end
   -- Run commands
-  for key, command in pairs(template_content.commands) do
-  	--system.chdir(wd .. "/" .. project_title)
-  	--process.start(command)
+  for k, command in pairs(template_content.commands) do
+  	system.chdir(wd .. "/" .. project_title)
+  	process.start(command)
   end
   -- Write template-specific message
   -- ?
@@ -74,6 +87,8 @@ end
 local function project_template_manager()
   -- Get input text for template name
   core.command_view:enter("Choose template", {
+    -- Submit the desired template name
+    -- TODO: add functionality for selecting template versions (es. Minecraft forge MDK versions for each Minecraft version)
     submit = function(template_name)
       -- Get input text for project folder title
       core.command_view:enter("Choose project title", {
@@ -83,15 +98,20 @@ local function project_template_manager()
             -- Submit chosen template for selection
             template_selection(template_name, project_title)
           else
-            print("WARNING: a folder with this title already exists!")
+            core.log("WARNING: a folder with this title exists already!")
           end
         end
       })
     end,
-    -- Suggestions for template names
-    suggest = function()
-    	-- TODO: return suggestions as names of files
-      -- TODO: filter suggestions matching already entered characters (es. common.fuzzy_match)
+    -- Suggest template names
+    suggest = function(template_name)
+      local template_list = {}
+      -- Get list of template names
+      for k, v in pairs(templates) do
+        table.insert(template_list, v["name"])
+      end
+      -- Match current input with templates names
+      return common.fuzzy_match(template_list, template_name)
     end
   })
 end
@@ -103,6 +123,7 @@ end
 command.add(nil, {
   ["ptm:choose-template"] = function ()
     project_template_manager()
+    -- TODO: spawn MessageView
   end
 })
 

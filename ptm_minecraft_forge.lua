@@ -1,8 +1,6 @@
 -- mod-version:3
 local ptm = require 'plugins.ptm'
 
-local mdk = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.20.1-47.3.10/forge-1.20.1-47.3.10-mdk.zip"
-
 local file1 = [[
 #!/bin/bash
 export PATH="/usr/lib/jvm/java-17-openjdk/bin/:$PATH"
@@ -15,16 +13,9 @@ export PATH="/usr/lib/jvm/java-17-openjdk/bin/:$PATH"
 ./gradlew build
 ]]
 
-local message = [[
-
-]]
-
 ptm.add_template {
-  name = "minecraft-forge-1.20.1",
-  desc = "Template for the latest Minecraft Forge 1.20.1 mod development kit.",
-  ext_libs = {
-    "/home/raffaele/.gradle/caches/modules-2/files-2.1/" -- WIP: path is incomplete
-  },
+  name = "minecraft-forge",
+  desc = "Template for the latest Minecraft Forge mod development kit.",
   files = {
     ["run.sh"] = {
       path = "",
@@ -38,17 +29,13 @@ ptm.add_template {
   dirs = {
     ".ext_libs"
   },
-  dependencies = {
+  ext_libs = {
     ["mdk"] = {
-      file = mdk,
+      file = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.20.1-47.3.10/forge-1.20.1-47.3.10-mdk.zip",
       path = ""
     }
   },
   commands = {
-    { "unzip", mdk, "-d", "src" },
-  },
-  message = {
-    header = "brief introduction",
-    content = message
+    { "unzip", "forge-1.20.1-47.3.10-mdk.zip", "-d", "src" }
   }
 }
