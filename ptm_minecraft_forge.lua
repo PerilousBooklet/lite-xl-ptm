@@ -1,41 +1,102 @@
 -- mod-version:3
 local ptm = require 'plugins.ptm'
 
+local file0 = [[
+# Example Mod
+
+...
+
+]]
+
 local file1 = [[
 #!/bin/bash
-export PATH="/usr/lib/jvm/java-17-openjdk/bin/:$PATH"
+export PATH="/usr/lib/jvm/java-sss-openjdk/bin/:$PATH"
 ./gradlew runClient
 ]]
 
 local file2 = [[
 #!/bin/bash
-export PATH="/usr/lib/jvm/java-17-openjdk/bin/:$PATH"
+export PATH="/usr/lib/jvm/java-sss-openjdk/bin/:$PATH"
 ./gradlew build
 ]]
 
-ptm.add_template {
-  name = "minecraft-forge",
-  desc = "Template for the latest Minecraft Forge mod development kit.",
-  files = {
-    ["run.sh"] = {
-      path = "",
-      content = file1
-    },
-    ["build.sh"] = {
-      path = "",
-      content = file2
-    },
+-- WIP: list of all MDKs
+local mdks = {
+  -- 1.20.1
+  {
+    file = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.20.1-47.3.10/forge-1.20.1-47.3.10-mdk.zip",
+    jre_ver = "17",
   },
-  dirs = {
-    ".ext_libs"
+  -- 1.19.2
+  {
+    file = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.19.2-43.4.4/forge-1.19.2-43.4.4-mdk.zip",
+    jre_ver = "17",
   },
-  ext_libs = {
-    ["mdk"] = {
-      file = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.20.1-47.3.10/forge-1.20.1-47.3.10-mdk.zip",
-      path = ""
-    }
+  -- 1.18.2
+  {
+    file = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.18.2-40.2.21/forge-1.18.2-40.2.21-mdk.zip",
+    jre_ver = "17",
   },
-  commands = {
-    { "unzip", "forge-1.20.1-47.3.10-mdk.zip", "-d", "src" }
-  }
+  -- 1.16.5
+  {
+    file = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.16.5-36.2.42/forge-1.16.5-36.2.42-mdk.zip",
+    jre_ver = "8",
+  },
+  -- 1.12.2
+  {
+    file = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.12.2-14.23.5.2859/forge-1.12.2-14.23.5.2859-mdk.zip",
+    jre_ver = "8",
+  },
+  -- 1.10.2
+  {
+    file = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.10.2-12.18.3.2511/forge-1.10.2-12.18.3.2511-mdk.zip",
+    jre_ver = "8",
+  },
+  -- 1.7.10
+  -- TODO: update substitution logic to adapt to 1.7.10 filename
+  {
+    file = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.7.10-10.13.4.1614-1.7.10/forge-1.7.10-10.13.4.1614-1.7.10-src.zip",
+    jre_ver = "8",
+  },
 }
+
+-- Filling...
+for _, v in pairs(mdks) do
+  -- Extract Minecraft and Forge versions from URL
+	local minecraft_ver_temp = string.match(v.file, "%d+%.%d+%.%d+%-")
+  local forge_ver_temp = string.match(v.file, "%d+%.%d+%.%d+%/")
+  local minecraft_ver = string.gsub(minecraft_ver_temp, "-", "")
+  local forge_ver = string.gsub(forge_ver_temp, "/", "")
+  -- Assign JDK version
+  local run_script = string.gsub(file1, "sss", v.jre_ver)
+  local build_script = string.gsub(file2, "sss", v.jre_ver)
+  -- Add template to templates table
+  ptm.add_template {
+    name = string.format("minecraft-forge-%s-%s", minecraft_ver, forge_ver),
+    files = {
+      ["README.md"] = {
+        path = "",
+        content = file0
+      },
+      ["run.sh"] = {
+        path = "",
+        content = run_script
+      },
+      ["build.sh"] = {
+        path = "",
+        content = build_script
+      },
+    },
+    dirs = {},
+    ext_libs = {
+      {
+        file = v.file,
+        path = ""
+      }
+    },
+    lsp_config_files = {},
+    commands = {
+      { "unzip", string.format("forge-%s-%s-mdk.zip", minecraft_ver, forge_ver), "-d", "src" }
+    }
+  }
+end

@@ -5,7 +5,7 @@ local command = require "core.command"
 local common = require "core.common"
 local config = require "core.config"
 local keymap = require "core.keymap"
---local www = require "libraries.www"
+local www = require "libraries.www.www" -- the path www.www will be fixed
 
 local ptm = {}
 
@@ -27,7 +27,7 @@ local function get_template(template_name)
 	return template
 end
 
--- TODO: add project-template-specific tab to explain manual steps / clarifications (use an EmptyView)
+-- TODO: Add project-template-specific tab to explain manual steps / clarifications (use an EmptyView)
 -- ex. a gradle project requires interaction with the user
 
 -- Creates and fills a file
@@ -39,13 +39,18 @@ local function create_and_fill(project_title, dir, file_name, file_content)
 end
 
 -- Download a file with lite-xl-www
--- WIP: download function
-local function download_file(file)
---	core.add_thread(function()
---    local agent = www.new()
---    print(agent:get(file))
---    print(agent:post(file, "q=test"))
---  end)
+-- WIP: Download function
+local function download_file(file, filename)
+  core.add_thread(function()
+    local f = io.open(filename, "wb")
+    www.request({
+      url = file,
+      response = function(response, chunk)
+        print(response.status)
+        f:write(chunk)
+      end
+    })
+  end)
 end
 
 -- Template generation
@@ -59,17 +64,18 @@ local function template_generation(template_name, project_title, template_conten
   	system.mkdir(wd .. "/" .. project_title .. "/" .. dir .. "/")
   end
   -- Download external libraries
-  for k, lib in pairs(template_content.ext_libs) do
-  	system.chdir(wd .. "/" .. project_title .. "/" .. lib.dir)
-  	download_file(lib.file)
-  end
-  -- Crete and fill config files for the LSP server
+  -- for k, lib in pairs(template_content.ext_libs) do
+  -- 	system.chdir(wd .. "/" .. project_title .. "/" .. lib.dir)
+  -- 	download_file(lib.file, k)
+  -- end
+  -- Create and fill config files for the LSP server
   for k, file in pairs(template_content.lsp_config_files) do
   	create_and_fill(project_title, file.path, k, file.content)
   end
   -- Run commands
   for k, command in pairs(template_content.commands) do
   	system.chdir(wd .. "/" .. project_title)
+  	-- TODO: use coroutines to manage command runs
   	process.start(command)
   end
   -- Write template-specific message
@@ -85,12 +91,12 @@ end
 
 -- Main function
 local function project_template_manager()
-  -- Get input text for template name
+  -- Get input for template name
   core.command_view:enter("Choose template", {
     -- Submit the desired template name
-    -- TODO: add functionality for selecting template versions (es. Minecraft forge MDK versions for each Minecraft version)
+    -- TODO: Add functionality for selecting template versions (es. Minecraft forge MDK versions for each Minecraft version)
     submit = function(template_name)
-      -- Get input text for project folder title
+      -- Get input for project folder title
       core.command_view:enter("Choose project title", {
         submit = function(project_title)
           -- Check if folder already exists
@@ -123,7 +129,7 @@ end
 command.add(nil, {
   ["ptm:choose-template"] = function ()
     project_template_manager()
-    -- TODO: spawn MessageView
+    -- TODO: Spawn MessageView
   end
 })
 
@@ -132,6 +138,7 @@ keymap.add {
   ["alt+p"] = "ptm:choose-template"
 }
 
+-- TODO: Rework current table filling logic with the one from the snippets/lsp plugin
 -- Filling the templates table (copied from the formatter plugin)
 return {
 	add_template = function(template)

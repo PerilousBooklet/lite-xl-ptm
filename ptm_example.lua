@@ -34,10 +34,10 @@ ptm.add_template {
     ".dirr"
   },
   ext_libs = {
-    ["localtube"] = {
-      file = "https://github.com/PerilousBooklet/localtube/archive/refs/heads/main.zip",
-      dir = ".ext_libs"
-    }
+    -- ["localtube"] = {
+    --   file = "https://github.com/PerilousBooklet/localtube/archive/refs/heads/main.zip",
+    --   dir = ".ext_libs"
+    -- }
   },
   lsp_config_files = {
     [".something.cfg"] = {
@@ -46,8 +46,8 @@ ptm.add_template {
     }
   },
   commands = {
-    { "alacritty", "-e", "touch", "prova.txt" },
-    --{ "unzip", "main.zip", "-d", "localtube" }
+    { "alacritty", "-e", "touch", "example.txt" },
+    -- { "unzip", "main.zip", "-d", "localtube" }
   },
   message = {
     header = "This is a brief introduction about this example project template.",

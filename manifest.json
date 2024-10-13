@@ -14,7 +14,7 @@
       "id": "ptm_example",
       "mod_version": "3",
       "name": "ptm_example",
-      "description": "A module for the Project Template Manager that adds an example project template.",
+      "description": "A module that adds an example project template.",
       "path": "./ptm_example.lua",
       "type": "plugin",
       "version": "0.0.1",
@@ -24,7 +24,7 @@
       "id": "ptm_minecraft_forge",
       "mod_version": "3",
       "name": "ptm_minecraft_forge",
-      "description": "A module for the Project Template Manager that adds support for the Minecraft Forge Mod Development Kits.",
+      "description": "A module that adds support for the Minecraft Forge Mod Development Kit.",
       "path": "./ptm_minecraft_forge.lua",
       "type": "plugin",
       "version": "0.0.1",
@@ -33,7 +33,7 @@
     {
       "id": "meta_ptm",
       "mod_version": "3",
-      "description": "A metapackage containing all project templates from the ptm plugin.",
+      "description": "A metapackage containing all project templates.",
       "type": "meta",
       "version": "0.0.1",
       "dependencies": {
