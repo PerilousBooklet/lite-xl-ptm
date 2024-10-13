@@ -53,7 +53,6 @@ local mdks = {
     jre_ver = "8",
   },
   -- 1.7.10
-  -- TODO: update substitution logic to adapt to 1.7.10 filename
   {
     file = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.7.10-10.13.4.1614-1.7.10/forge-1.7.10-10.13.4.1614-1.7.10-src.zip",
     jre_ver = "8",
@@ -63,10 +62,10 @@ local mdks = {
 -- Filling...
 for _, v in pairs(mdks) do
   -- Extract Minecraft and Forge versions from URL
-	local minecraft_ver_temp = string.match(v.file, "%d+%.%d+%.%d+%-")
-  local forge_ver_temp = string.match(v.file, "%d+%.%d+%.%d+%/")
-  local minecraft_ver = string.gsub(minecraft_ver_temp, "-", "")
-  local forge_ver = string.gsub(forge_ver_temp, "/", "")
+	local minecraft_ver_temp = string.match(v.file, "%/%d+%.%d+%.%d+%.?%d*")
+  local forge_ver_temp = string.match(v.file, "%-%d+%.%d+%.%d+%.?%d*")
+  local minecraft_ver = string.gsub(minecraft_ver_temp, "/", "")
+  local forge_ver = string.gsub(forge_ver_temp, "-", "")
   -- Assign JDK version
   local run_script = string.gsub(file1, "sss", v.jre_ver)
   local build_script = string.gsub(file2, "sss", v.jre_ver)
@@ -96,7 +95,8 @@ for _, v in pairs(mdks) do
     },
     lsp_config_files = {},
     commands = {
-      { "unzip", string.format("forge-%s-%s-mdk.zip", minecraft_ver, forge_ver), "-d", "src" }
+      -- The archive name is extracted from the URL with string.match and string.gsub
+      { "unzip", string.gsub(string.match(v.file, "%/.+%.zip"), "/", ""), "-d", "src" }
     }
   }
 end
