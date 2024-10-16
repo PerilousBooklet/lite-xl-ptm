@@ -20,7 +20,7 @@ export PATH="/usr/lib/jvm/java-sss-openjdk/bin/:$PATH"
 ./gradlew build
 ]]
 
--- WIP: list of all MDKs
+-- WIP: list the remaining urls
 local mdks = {
   -- 1.20.1
   {
@@ -97,6 +97,7 @@ for _, v in pairs(mdks) do
     commands = {
       -- The archive name is extracted from the URL with string.match and string.gsub
       { "unzip", string.gsub(string.match(v.file, "%/.+%.zip"), "/", ""), "-d", "src" }
-    }
+    },
+    message = {}
   }
 end

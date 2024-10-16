@@ -13,6 +13,9 @@ config.plugins.ptm = common.merge({
   -- ?
 }, config.plugins.ptm)
 
+-- MessageView
+
+
 local templates = {}
 local wd = system.absolute_path(".")
 
@@ -76,6 +79,7 @@ local function template_generation(template_name, project_title, template_conten
   for k, command in pairs(template_content.commands) do
   	system.chdir(wd .. "/" .. project_title)
   	-- TODO: use coroutines to manage command runs
+  	-- TODO: open the terminal plugin and run the command
   	process.start(command)
   end
   -- Write template-specific message
@@ -94,7 +98,6 @@ local function project_template_manager()
   -- Get input for template name
   core.command_view:enter("Choose template", {
     -- Submit the desired template name
-    -- TODO: Add functionality for selecting template versions (es. Minecraft forge MDK versions for each Minecraft version)
     submit = function(template_name)
       -- Get input for project folder title
       core.command_view:enter("Choose project title", {

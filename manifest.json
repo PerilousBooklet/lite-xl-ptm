@@ -24,8 +24,18 @@
       "id": "ptm_minecraft_forge",
       "mod_version": "3",
       "name": "ptm_minecraft_forge",
-      "description": "A module that adds support for the Minecraft Forge Mod Development Kit.",
+      "description": "A module that adds support for the Minecraft Forge Mod Development Kits.",
       "path": "./ptm_minecraft_forge.lua",
+      "type": "plugin",
+      "version": "0.0.1",
+      "dependencies": { "ptm": {} }
+    },
+    {
+      "id": "ptm_minecraft_fabric",
+      "mod_version": "3",
+      "name": "ptm_minecraft_fabric",
+      "description": "A module that adds support for the Minecraft Fabric Mod Development Kits.",
+      "path": "./ptm_minecraft_fabric.lua",
       "type": "plugin",
       "version": "0.0.1",
       "dependencies": { "ptm": {} }
@@ -39,7 +49,8 @@
       "dependencies": {
         "ptm": {},
         "ptm_example": {},
-        "ptm_minecraft_forge": {}
+        "ptm_minecraft_forge": {},
+        "ptm_minecraft_fabric": {}
       }
     }
   ]
