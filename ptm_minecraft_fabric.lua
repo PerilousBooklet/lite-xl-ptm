@@ -97,7 +97,6 @@ for _, v in pairs(mdks) do
       { "unzip", string.gsub(string.match(v.file, "%/.+%.zip"), "/", ""), "-d", "src" },
       -- WIP: https://fabricmc.net/wiki/tutorial:setup
       { "./setup" }
-    },
-    message = {}
+    }
   }
 end

@@ -13,9 +13,6 @@ config.plugins.ptm = common.merge({
   -- ?
 }, config.plugins.ptm)
 
--- MessageView
-
-
 local templates = {}
 local wd = system.absolute_path(".")
 
@@ -29,9 +26,6 @@ local function get_template(template_name)
 	end
 	return template
 end
-
--- TODO: Add project-template-specific tab to explain manual steps / clarifications (use an EmptyView)
--- ex. a gradle project requires interaction with the user
 
 -- Creates and fills a file
 local function create_and_fill(project_title, dir, file_name, file_content)
@@ -82,8 +76,6 @@ local function template_generation(template_name, project_title, template_conten
   	-- TODO: open the terminal plugin and run the command
   	process.start(command)
   end
-  -- Write template-specific message
-  -- ?
 end
 
 -- Template selection

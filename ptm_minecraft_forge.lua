@@ -97,7 +97,6 @@ for _, v in pairs(mdks) do
     commands = {
       -- The archive name is extracted from the URL with string.match and string.gsub
       { "unzip", string.gsub(string.match(v.file, "%/.+%.zip"), "/", ""), "-d", "src" }
-    },
-    message = {}
+    }
   }
 end

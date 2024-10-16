@@ -5,13 +5,6 @@ local file1 = "something something"
 
 local file2 = "some config options"
 
-local message = [[
-Something something something
-something something something
-something something something
-something something something.
-]]
-
 ptm.add_template {
   name = "example",
   desc = "Example template.",
@@ -48,9 +41,5 @@ ptm.add_template {
   commands = {
     { "alacritty", "-e", "touch", "example.txt" },
     -- { "unzip", "main.zip", "-d", "localtube" }
-  },
-  message = {
-    header = "This is a brief introduction about this example project template.",
-    content = message
   }
 }
