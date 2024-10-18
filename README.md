@@ -1,8 +1,8 @@
 # Project Template Manager
 
-![ptm-1](./assets/ptm-1) 
+![ptm-1](/assets/ptm-1) 
 
-![ptm-2](./assets/ptm-2) 
+![ptm-2](/assets/ptm-2) 
 
 A plugin for Lite XL that generates project templates for programming languages.
 
