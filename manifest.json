@@ -11,11 +11,31 @@
       "dependencies": { "www": {}, "terminal": {} }
     },
     {
-      "id": "ptm_example",
+      "id": "ptm_c_simple",
       "mod_version": "3",
-      "name": "ptm_example",
-      "description": "A module that adds an example project template.",
-      "path": "./ptm_example.lua",
+      "name": "ptm_c_simple",
+      "description": "A single-file template for C.",
+      "path": "./ptm_c_simple.lua",
+      "type": "plugin",
+      "version": "0.1.0",
+      "dependencies": { "ptm": {} }
+    },
+    {
+      "id": "ptm_cpp_simple",
+      "mod_version": "3",
+      "name": "ptm_cpp_simple",
+      "description": "A single-file template for C++.",
+      "path": "./ptm_cpp_simple.lua",
+      "type": "plugin",
+      "version": "0.1.0",
+      "dependencies": { "ptm": {} }
+    },
+    {
+      "id": "ptm_java_simple",
+      "mod_version": "3",
+      "name": "ptm_java_simple",
+      "description": "A single-file template for Java.",
+      "path": "./ptm_java_simple.lua",
       "type": "plugin",
       "version": "0.1.0",
       "dependencies": { "ptm": {} }
@@ -48,7 +68,9 @@
       "version": "0.0.1",
       "dependencies": {
         "ptm": {},
-        "ptm_example": {},
+        "ptm_c_simple": {},
+        "ptm_cpp_simple": {},
+        "ptm_java_simple": {},
         "ptm_minecraft_forge": {},
         "ptm_minecraft_fabric": {}
       }
