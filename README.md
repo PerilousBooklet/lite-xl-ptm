@@ -12,8 +12,7 @@ A plugin for Lite XL that generates project templates for programming languages.
 <!-- TODO: write docs for how functions work -->
 <!-- TODO: write docs for data storage -->
 
-## TODO
-- [ ] List of templates
+## List of Templates
   - [ ] C, hello world
   - [ ] C, simple
   - [ ] C, autotools
@@ -33,3 +32,5 @@ A plugin for Lite XL that generates project templates for programming languages.
   - [ ] Python virtual environment
   - [ ] PHP, simple
   - [ ] LaTeX
+  - [x] Minecraft Forge (latest most popular versions)
+  - [x] Minecraft Fabric (latest most popular versions)
