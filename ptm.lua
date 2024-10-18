@@ -8,12 +8,12 @@ local keymap = require "core.keymap"
 local www = require "libraries.www"
 local terminal = require "plugins.terminal"
 
-local ptm = {}
-
+-- Configuation Options
 config.plugins.ptm = common.merge({
   -- ?
 }, config.plugins.ptm)
 
+-- Functions
 local templates = {}
 local wd = system.absolute_path(".")
 
