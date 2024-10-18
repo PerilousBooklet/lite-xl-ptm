@@ -7,7 +7,7 @@
       "description": "A project template manager for Lite XL.",
       "path": "./ptm.lua",
       "type": "plugin",
-      "version": "0.0.1",
+      "version": "0.1.0",
       "dependencies": { "www": {}, "terminal": {} }
     },
     {
@@ -17,7 +17,7 @@
       "description": "A module that adds an example project template.",
       "path": "./ptm_example.lua",
       "type": "plugin",
-      "version": "0.0.1",
+      "version": "0.1.0",
       "dependencies": { "ptm": {} }
     },
     {
@@ -27,7 +27,7 @@
       "description": "A module that adds support for the Minecraft Forge Mod Development Kits.",
       "path": "./ptm_minecraft_forge.lua",
       "type": "plugin",
-      "version": "0.0.1",
+      "version": "0.1.0",
       "dependencies": { "ptm": {} }
     },
     {
