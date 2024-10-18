@@ -10,18 +10,21 @@ local file0 = [[
 
 local file1 = [[
 #!/bin/bash
+cd ./src || exit
 export PATH="/usr/lib/jvm/java-sss-openjdk/bin/:$PATH"
 ./gradlew runClient
 ]]
 
 local file2 = [[
 #!/bin/bash
+cd ./src || exit
 export PATH="/usr/lib/jvm/java-sss-openjdk/bin/:$PATH"
 ./gradlew build
 ]]
 
 local file3 = [[
 #!/bin/bash
+cd ./src || exit
 export PATH="/usr/lib/jvm/java-sss-openjdk/bin/:$PATH"
 ./gradlew genSources
 ]]
@@ -87,16 +90,24 @@ for _, v in pairs(mdks) do
     dirs = {},
     ext_libs = {
       {
-        file = v.file,
+        url = v.file,
         path = ""
       }
     },
     lsp_config_files = {},
     commands = {
-      -- The archive name is extracted from the URL with string.match and string.gsub
-      { "unzip", string.gsub(string.match(v.file, "%/.+%.zip"), "/", ""), "-d", "src" },
-      -- WIP: https://fabricmc.net/wiki/tutorial:setup
-      { "./setup" }
+      -- Wait until the archive is fully downloaded
+      { "sleep 2" },
+      -- Setup mod development kit (https://fabricmc.net/wiki/tutorial:setup)
+      { "unzip", string.format("%s.zip", fabric_ver) },
+      { "mv", string.format("fabric-example-mod-%s", fabric_ver), "src" },
+      { "rm", "-v", string.format("%s.zip", fabric_ver) },
+      -- Make scripts executable
+      { "chmod", "+x", "run.sh" },
+      { "chmod", "+x", "build.sh" },
+      { "chmod", "+x", "setup.sh" },
+      -- Run setup script
+      { "./setup.sh" }
     }
   }
 end

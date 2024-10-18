@@ -5,7 +5,8 @@ local command = require "core.command"
 local common = require "core.common"
 local config = require "core.config"
 local keymap = require "core.keymap"
-local www = require "libraries.www.www" -- the path www.www will be fixed
+local www = require "libraries.www"
+local terminal = require "plugins.terminal"
 
 local ptm = {}
 
@@ -36,11 +37,11 @@ local function create_and_fill(project_title, dir, file_name, file_content)
 end
 
 -- Download a file with lite-xl-www
--- WIP: Download function
+-- WIP: Fix download function
 local function download_file(file, filename)
   core.add_thread(function()
     local f = io.open(filename, "wb")
-    www.request({
+      www.request({
       url = file,
       response = function(response, chunk)
         print(response.status)
@@ -61,20 +62,24 @@ local function template_generation(template_name, project_title, template_conten
   	system.mkdir(wd .. "/" .. project_title .. "/" .. dir .. "/")
   end
   -- Download external libraries
-  -- for k, lib in pairs(template_content.ext_libs) do
-  -- 	system.chdir(wd .. "/" .. project_title .. "/" .. lib.dir)
-  -- 	download_file(lib.file, k)
-  -- end
+  for k, lib in pairs(template_content.ext_libs) do
+    system.chdir(wd .. "/" .. project_title .. "/" .. lib.path)
+    --download_file(lib.url, k)
+    -- TODO: Add timely queue for executing generation functions (es. no more sleep 3)
+    -- TODO: add download status in StatusView
+    -- TODO: Add Windows support
+    -- TODO: Add MacOS support
+    process.start({ "wget", lib.url })
+  end
   -- Create and fill config files for the LSP server
   for k, file in pairs(template_content.lsp_config_files) do
   	create_and_fill(project_title, file.path, k, file.content)
   end
   -- Run commands
-  for k, command in pairs(template_content.commands) do
+  for k, cmd in pairs(template_content.commands) do
   	system.chdir(wd .. "/" .. project_title)
-  	-- TODO: use coroutines to manage command runs
-  	-- TODO: open the terminal plugin and run the command
-  	process.start(command)
+  	-- FIXME: fix commands list print inside terminal
+  	command.perform("terminal:execute", table.concat(cmd, " "))
   end
 end
 
@@ -85,7 +90,7 @@ local function template_selection(template_name, project_title)
   template_generation(template_name, project_title, template_content)
 end
 
--- Main function
+-- Main
 local function project_template_manager()
   -- Get input for template name
   core.command_view:enter("Choose template", {
@@ -124,7 +129,6 @@ end
 command.add(nil, {
   ["ptm:choose-template"] = function ()
     project_template_manager()
-    -- TODO: Spawn MessageView
   end
 })
 

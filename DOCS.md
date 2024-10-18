@@ -1,9 +1,31 @@
+# Documentation
+
+## Table of Contents
+
+1. [Functions][#functions]
+2. [Data Storage][#data-storage]
+
+## Functions
+
+.
+
+## Data Storage
+
+Example module:
+
+`ptm_example.lua`
+
+```lua
 -- mod-version:3
 local ptm = require 'plugins.ptm'
 
-local file1 = "something something"
+local file1 = "SOMETHING something"
 
-local file2 = "some config options"
+local file2 = [[
+SOMETHING
+SOMETHING
+SOMETHING
+]]
 
 ptm.add_template {
   name = "example",
@@ -27,10 +49,10 @@ ptm.add_template {
     ".dirr"
   },
   ext_libs = {
-    -- ["localtube"] = {
-    --   file = "https://github.com/PerilousBooklet/localtube/archive/refs/heads/main.zip",
-    --   dir = ".ext_libs"
-    -- }
+    ["1.21.zip"] = {
+      url = "https://github.com/FabricMC/fabric-example-mod/archive/refs/heads/1.21.zip",
+      path = ""
+    }
   },
   lsp_config_files = {
     [".something.cfg"] = {
@@ -39,7 +61,7 @@ ptm.add_template {
     }
   },
   commands = {
-    { "alacritty", "-e", "touch", "example.txt" },
-    -- { "unzip", "main.zip", "-d", "localtube" }
+    { "touch", "example.txt" }
   }
 }
+```

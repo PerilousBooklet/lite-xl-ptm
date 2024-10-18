@@ -1,9 +1,16 @@
 # Project Template Manager
+
 A plugin for Lite XL that generates project templates for programming languages.
+
+> [!WARNING]
+> LINUX-ONLY (at least until the download function with `lite-xl-www` is fixed )
 
 ## How a template works
 
 ...
+
+<!-- TODO: write docs for how functions work -->
+<!-- TODO: write docs for data storage -->
 
 ## TODO
 - [ ] List of templates

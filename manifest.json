@@ -8,7 +8,7 @@
       "path": "./ptm.lua",
       "type": "plugin",
       "version": "0.0.1",
-      "dependencies": { "www": {} }
+      "dependencies": { "www": {}, "terminal": {} }
     },
     {
       "id": "ptm_example",
