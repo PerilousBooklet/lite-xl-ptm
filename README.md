@@ -7,7 +7,7 @@
 A plugin for Lite XL that generates project templates for programming languages.
 
 > [!WARNING]
-> LINUX-ONLY at the moment )
+> LINUX-ONLY at the moment
 
 ## Documentation
 
