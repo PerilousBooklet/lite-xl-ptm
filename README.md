@@ -7,7 +7,7 @@
 A plugin for Lite XL that generates project templates for programming languages.
 
 > [!WARNING]
-> LINUX-ONLY (at least until the download function with `lite-xl-www` is fixed )
+> LINUX-ONLY at the moment )
 
 ## Documentation
 
