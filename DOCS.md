@@ -2,12 +2,12 @@
 
 ## Table of Contents
 
-1. [Functions][#functions]
-2. [Data Storage][#data-storage]
+1. [Functions](#functions)
+2. [Data Storage](#data-storage)
 
 ## Functions
 
-.
+TODO
 
 ## Data Storage
 
