@@ -38,7 +38,7 @@ local mdks = {
   -- 1.20
   {
     file = "https://github.com/FabricMC/fabric-example-mod/archive/refs/heads/1.20.zip",
-    jre_ver = "17",
+    jre_ver = "21",
   },
   -- 1.19
   {
@@ -90,6 +90,7 @@ for _, v in pairs(mdks) do
     dirs = {},
     ext_libs = {
       {
+        filename = string.format("%s.zip", fabric_ver),
         url = v.file,
         path = ""
       }
@@ -97,8 +98,9 @@ for _, v in pairs(mdks) do
     lsp_config_files = {},
     commands = {
       -- Wait until the archive is fully downloaded
-      { "sleep 2" },
+      { "sleep 3" },
       -- Setup mod development kit (https://fabricmc.net/wiki/tutorial:setup)
+      -- FIX: often the archive doesn't get downloaded in time
       { "unzip", string.format("%s.zip", fabric_ver) },
       { "mv", string.format("fabric-example-mod-%s", fabric_ver), "src" },
       { "rm", "-v", string.format("%s.zip", fabric_ver) },

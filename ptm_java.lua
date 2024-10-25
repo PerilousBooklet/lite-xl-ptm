@@ -2,9 +2,9 @@
 local ptm = require 'plugins.ptm'
 
 -- This module installs 3 templates:
--- 1. Java, Simple
--- 2. Java, Gradle
--- 3. Java, Maven, quickstart
+-- 1. Java, Simple (line 9)
+-- 2. Java, Gradle (line 75)
+-- 3. Java, Maven, quickstart (line 116)
 
 -- Java, Simple
 local readme = [[

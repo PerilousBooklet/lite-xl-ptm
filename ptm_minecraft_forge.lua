@@ -91,6 +91,7 @@ for _, v in pairs(mdks) do
     dirs = {},
     ext_libs = {
       {
+        filename = string.format("forge-%s-%s-mdk.zip", minecraft_ver, forge_ver),
         url = v.file,
         path = ""
       }
