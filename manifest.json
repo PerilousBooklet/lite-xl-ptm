@@ -5,75 +5,10 @@
       "mod_version": "3",
       "name": "Project Template Manager",
       "description": "A project template manager for Lite XL.",
-      "path": "./ptm.lua",
+      "path": ".",
       "type": "plugin",
       "version": "0.1.0",
       "dependencies": { "www": {}, "terminal": {} }
-    },
-    {
-      "id": "ptm_c",
-      "mod_version": "3",
-      "name": "ptm_c",
-      "description": "A template module for C.",
-      "path": "./ptm_c.lua",
-      "type": "plugin",
-      "version": "0.1.0",
-      "dependencies": { "ptm": {} }
-    },
-    {
-      "id": "ptm_cpp",
-      "mod_version": "3",
-      "name": "ptm_cpp",
-      "description": "A template module for C++.",
-      "path": "./ptm_cpp.lua",
-      "type": "plugin",
-      "version": "0.1.0",
-      "dependencies": { "ptm": {} }
-    },
-    {
-      "id": "ptm_java",
-      "mod_version": "3",
-      "name": "ptm_java",
-      "description": "A template module for Java.",
-      "path": "./ptm_java.lua",
-      "type": "plugin",
-      "version": "0.1.0",
-      "dependencies": { "ptm": {} }
-    },
-    {
-      "id": "ptm_minecraft_forge",
-      "mod_version": "3",
-      "name": "ptm_minecraft_forge",
-      "description": "A template module for Minecraft Forge.",
-      "path": "./ptm_minecraft_forge.lua",
-      "type": "plugin",
-      "version": "0.1.0",
-      "dependencies": { "ptm": {} }
-    },
-    {
-      "id": "ptm_minecraft_fabric",
-      "mod_version": "3",
-      "name": "ptm_minecraft_fabric",
-      "description": "A template module for Minecraft Fabric.",
-      "path": "./ptm_minecraft_fabric.lua",
-      "type": "plugin",
-      "version": "0.0.1",
-      "dependencies": { "ptm": {} }
-    },
-    {
-      "id": "meta_ptm",
-      "mod_version": "3",
-      "description": "A metapackage for all template modules.",
-      "type": "meta",
-      "version": "0.0.1",
-      "dependencies": {
-        "ptm": {},
-        "ptm_c": {},
-        "ptm_cpp": {},
-        "ptm_java": {},
-        "ptm_minecraft_forge": {},
-        "ptm_minecraft_fabric": {}
-      }
     }
   ]
 }
