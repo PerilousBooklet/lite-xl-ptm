@@ -98,9 +98,6 @@ function ptm.parse_list()
   local list = system.list_dir("templates")
   local list_matched = {}
   local temp = {}
-  -- FIX: there's an additional entry in list
-  -- FIX: suggest shows only the example template name
-  print(list)
   for k, v in ipairs(list) do
     temp = string.gsub(list[k], ".lua", "")
     table.insert(list_matched, temp)
@@ -111,7 +108,6 @@ end
 function ptm.load()
   local templates_list = ptm.parse_list()
   for _, v in ipairs(templates_list) do
-    print(v)
     require("plugins.ptm.templates." .. v)
   end
 end

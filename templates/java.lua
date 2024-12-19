@@ -40,7 +40,7 @@ Main-Class: Main
 
 ]]
 
-ptm.add_template {
+ptm.add_template() {
   name = "java-simple",
   desc = "A single-file template for Java.",
   files = {
@@ -84,7 +84,7 @@ local run_gradle = [[
 ./gradlew build
 ]]
 
-ptm.add_template {
+ptm.add_template() {
   name = "java-gradle",
   desc = "",
   files = {
@@ -137,7 +137,7 @@ mvn package
 mvn exec:java -Dexec.mainClass="com.mycompany.app.App"
 ]]
 
-ptm.add_template {
+ptm.add_template() {
   name = "java-maven-quickstart",
   desc = "Maven quickstart template.",
   files = {

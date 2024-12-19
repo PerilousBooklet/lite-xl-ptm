@@ -72,7 +72,7 @@ for _, v in pairs(mdks) do
   local run_script = string.gsub(file1, "sss", v.jre_ver)
   local build_script = string.gsub(file2, "sss", v.jre_ver)
   -- Add template to templates table
-  ptm.add_template {
+  ptm.add_template() {
     name = string.format("minecraft-forge-%s-%s", minecraft_ver, forge_ver),
     files = {
       ["README.md"] = {
@@ -99,11 +99,11 @@ for _, v in pairs(mdks) do
     lsp_config_files = {},
     commands = {
       -- Wait until the archive is fully downloaded
-      { "sleep 3" },
+      { "sleep 10" },
       -- Setup mod development kit
       { "mkdir", "-v", "src" },
       { "unzip", string.format("forge-%s-%s-mdk.zip", minecraft_ver, forge_ver), "-d", "./src" },
-      { "rm", "-v", string.format("forge-%s-%s-mdk.zip", minecraft_ver, forge_ver) },
+      --{ "rm", "-v", string.format("forge-%s-%s-mdk.zip", minecraft_ver, forge_ver) },
       -- Make scripts executable
       { "chmod", "+x", "run.sh" },
       { "chmod", "+x", "build.sh" }
