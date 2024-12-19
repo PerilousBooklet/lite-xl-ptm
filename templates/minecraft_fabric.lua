@@ -43,7 +43,7 @@ local mdks = {
   -- 1.19
   {
     file = "https://github.com/FabricMC/fabric-example-mod/archive/refs/heads/1.19.zip",
-    jre_ver = "17",
+    jre_ver = "21",
   },
   -- 1.18
   {
@@ -67,7 +67,7 @@ for _, v in pairs(mdks) do
   local build_script = string.gsub(file2, "sss", v.jre_ver)
   local setup_script = string.gsub(file3, "sss", v.jre_ver)
   -- Add template to templates table
-  ptm.add_template {
+  ptm.add_template() {
     name = string.format("minecraft-fabric-%s", fabric_ver),
     files = {
       ["README.md"] = {
@@ -98,12 +98,12 @@ for _, v in pairs(mdks) do
     lsp_config_files = {},
     commands = {
       -- Wait until the archive is fully downloaded
-      { "sleep 3" },
-      -- Setup mod development kit (https://fabricmc.net/wiki/tutorial:setup)
-      -- FIX: often the archive doesn't get downloaded in time
+      -- FIX: the command table gets run without waiting for wget to finish downloading the deps
+      { "sleep 10" },
+      -- Setup mod development kit
       { "unzip", string.format("%s.zip", fabric_ver) },
       { "mv", string.format("fabric-example-mod-%s", fabric_ver), "src" },
-      { "rm", "-v", string.format("%s.zip", fabric_ver) },
+      --{ "rm", "-v", string.format("%s.zip", fabric_ver) },
       -- Make scripts executable
       { "chmod", "+x", "run.sh" },
       { "chmod", "+x", "build.sh" },

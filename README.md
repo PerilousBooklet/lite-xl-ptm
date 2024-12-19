@@ -6,8 +6,11 @@
 
 A plugin for Lite XL that generates project templates for programming languages.
 
+> [!NOTE]
+> At the moment this plugin is LINUX ONLY
+
 > [!WARNING]
-> LINUX-ONLY at the moment
+> At the moment the functionality for downloading dependency is broken, a FIX is WIP
 
 ## Documentation
 

@@ -19,7 +19,7 @@ int main() {
 }
 ]]
 
-ptm.add_template {
+ptm.add_template() {
   name = "cpp-simple",
   desc = "A simple C++ project.",
   files = {

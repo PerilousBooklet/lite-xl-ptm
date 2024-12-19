@@ -8,7 +8,9 @@ local keymap = require "core.keymap"
 local www = require "libraries.www"
 local terminal = require "plugins.terminal"
 
--- Configuation Options
+local ptm = {}
+
+-- Configuration Options
 config.plugins.ptm = common.merge({
   -- ?
 }, config.plugins.ptm)
@@ -63,9 +65,7 @@ local function generate_template(template_name, project_title, template_content)
     system.chdir(wd .. "/" .. project_title .. "/" .. lib.path)
     --download_file(lib.url, lib.filename)
     -- TODO: Add timely queue for executing generation functions (es. no more sleep 3)
-    -- TODO: add download status in StatusView
-    -- TODO: Add Windows support
-    -- TODO: Add MacOS support
+    -- TODO: Add download status in StatusView
     process.start({ "wget", lib.url })
   end
   -- Create and fill config files for the LSP server
@@ -82,12 +82,36 @@ end
 
 -- Template selection
 local function select_template(template_name, project_title)
-  system.mkdir(wd .. "/" .. project_title) -- Rn it stops here
+  system.mkdir(wd .. "/" .. project_title)
   local template_content = get_template(template_name)
   generate_template(template_name, project_title, template_content)
 end
 
 -- Main
+function ptm.add_template()
+	return function (t)
+    table.insert(templates, t)
+  end
+end
+
+function ptm.parse_list()
+  local list = system.list_dir("templates")
+  local list_matched = {}
+  local temp = {}
+  for k, v in ipairs(list) do
+    temp = string.gsub(list[k], ".lua", "")
+    table.insert(list_matched, temp)
+  end
+  return list_matched
+end
+
+function ptm.load()
+  local templates_list = ptm.parse_list()
+  for _, v in ipairs(templates_list) do
+    require("plugins.ptm.templates." .. v)
+  end
+end
+
 local function project_template_manager()
   -- Get input for template name
   core.command_view:enter("Choose template", {
@@ -119,9 +143,6 @@ local function project_template_manager()
   })
 end
 
--- Init
--- not required (Lite XL automatically runs the ptm_*.lua files)
-
 -- Commands
 command.add(nil, {
   ["ptm:choose-template"] = function ()
@@ -134,10 +155,4 @@ keymap.add {
   ["alt+p"] = "ptm:choose-template"
 }
 
--- TODO: Rework current table filling logic with the one from the snippets/lsp plugin
--- Filling the templates table (copied from the formatter plugin)
-return {
-	add_template = function(template)
-	  table.insert(templates, template)
-	end
-}
+return ptm
