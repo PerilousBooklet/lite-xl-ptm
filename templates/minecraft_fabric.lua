@@ -103,7 +103,7 @@ for _, v in pairs(mdks) do
       -- Setup mod development kit
       { "unzip", string.format("%s.zip", fabric_ver) },
       { "mv", string.format("fabric-example-mod-%s", fabric_ver), "src" },
-      --{ "rm", "-v", string.format("%s.zip", fabric_ver) },
+      { "rm", "-v", string.format("%s.zip", fabric_ver) },
       -- Make scripts executable
       { "chmod", "+x", "run.sh" },
       { "chmod", "+x", "build.sh" },

@@ -103,7 +103,7 @@ for _, v in pairs(mdks) do
       -- Setup mod development kit
       { "mkdir", "-v", "src" },
       { "unzip", string.format("forge-%s-%s-mdk.zip", minecraft_ver, forge_ver), "-d", "./src" },
-      --{ "rm", "-v", string.format("forge-%s-%s-mdk.zip", minecraft_ver, forge_ver) },
+      { "rm", "-v", string.format("forge-%s-%s-mdk.zip", minecraft_ver, forge_ver) },
       -- Make scripts executable
       { "chmod", "+x", "run.sh" },
       { "chmod", "+x", "build.sh" }
