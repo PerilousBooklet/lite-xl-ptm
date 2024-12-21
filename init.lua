@@ -95,18 +95,21 @@ function ptm.add_template()
 end
 
 function ptm.parse_list()
-  local list = system.list_dir("templates")
+	local path = system.absolute_path(".config/lite-xl/plugins/ptm/templates")
+	local list = system.list_dir(path)
   local list_matched = {}
-  local temp = {}
-  for k, v in ipairs(list) do
-    temp = string.gsub(list[k], ".lua", "")
-    table.insert(list_matched, temp)
+  local ts = ""
+  for k, v in pairs(list) do
+    ts = string.gsub(list[k], ".lua", "")
+    table.insert(list_matched, ts)
   end
   return list_matched
 end
 
 function ptm.load()
+  -- Get template filenames
   local templates_list = ptm.parse_list()
+  -- Load all template files
   for _, v in ipairs(templates_list) do
     require("plugins.ptm.templates." .. v)
   end
