@@ -27,7 +27,7 @@ SOMETHING
 SOMETHING
 ]]
 
-ptm.add_template {
+ptm.add_template() {
   name = "example",
   desc = "Example template.",
   files = {
@@ -46,7 +46,8 @@ ptm.add_template {
   },
   dirs = {
     ".ext_libs",
-    ".dirr"
+    ".dirr",
+    ".dirr" .. "/" .. ".dirrr"
   },
   ext_libs = {
     ["1.21.zip"] = {
@@ -56,7 +57,7 @@ ptm.add_template {
   },
   lsp_config_files = {
     [".something.cfg"] = {
-      path = ".dirr",
+      path = ".dirr" .. "/" .. ".dirrr",
       content = file2
     }
   },
