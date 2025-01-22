@@ -44,6 +44,7 @@ ptm.add_template() {
     }
   },
   commands = {
+    { "sleep 10" },
     { "touch", "example.txt" }
   }
 }
