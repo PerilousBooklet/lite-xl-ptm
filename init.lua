@@ -5,7 +5,7 @@ local command = require "core.command"
 local common = require "core.common"
 local config = require "core.config"
 local keymap = require "core.keymap"
-local www = require "libraries.www"
+-- local www = require "libraries.www"
 local terminal = require "plugins.terminal"
 
 local ptm = {}
@@ -17,9 +17,9 @@ config.plugins.ptm = common.merge({
 
 -- Functions
 local templates = {}
-local wd = system.absolute_path(".")
+-- FUTURE_TODO: after PROJECT REWORK is complete, use core.root_project().path instead of core.project_dir
 
--- this function will return the first template that matches
+-- NOTE: this function will return the first template that matches
 local function get_template(template_name)
 	local template = nil
 	for _, v in pairs(templates) do
@@ -32,23 +32,23 @@ end
 
 -- Creates and fills a file
 local function create_and_fill_file(project_title, dir, file_name, file_content)
-	system.mkdir(wd .. "/" .. project_title .. "/" .. dir)
-	local f = io.open(wd .. "/" .. project_title .. "/" .. dir .. "/" .. file_name, "w")
+	system.mkdir(core.project_dir .. "/" .. project_title .. "/" .. dir)
+	local f = io.open(core.project_dir .. "/" .. project_title .. "/" .. dir .. "/" .. file_name, "w")
   f:write(file_content)
   f:close()
 end
 
 -- Download a file with lite-xl-www
 -- FIX: cannot set undefined var connection ...
-local agent = www.new()
-local function download_file(file, filename)
-  local f = io.open(filename, "wb")
-  agent:get(file, {
-    response = function(response, chunk)
-      f:write(chunk)
-    end
-  })
-end
+-- local agent = www.new()
+-- local function download_file(file, filename)
+--   local f = io.open(filename, "wb")
+--   agent:get(file, {
+--     response = function(response, chunk)
+--       f:write(chunk)
+--     end
+--   })
+-- end
 
 -- Template generation
 local function generate_template(template_name, project_title, template_content)
@@ -58,11 +58,11 @@ local function generate_template(template_name, project_title, template_content)
   end
   -- Create directories
   for k, dir in pairs(template_content.dirs) do
-  	system.mkdir(wd .. "/" .. project_title .. "/" .. dir .. "/")
+  	system.mkdir(core.project_dir .. "/" .. project_title .. "/" .. dir .. "/")
   end
   -- Download external libraries
   for k, lib in pairs(template_content.ext_libs) do
-    system.chdir(wd .. "/" .. project_title .. "/" .. lib.path)
+    system.chdir(core.project_dir .. "/" .. project_title .. "/" .. lib.path)
     --download_file(lib.url, lib.filename)
     -- TODO: Add timely queue for executing generation functions (es. no more sleep 3)
     -- TODO: Add download status in StatusView
@@ -74,7 +74,7 @@ local function generate_template(template_name, project_title, template_content)
   end
   -- Run commands
   for k, cmd in pairs(template_content.commands) do
-  	system.chdir(wd .. "/" .. project_title)
+  	system.chdir(core.project_dir .. "/" .. project_title)
   	-- FIX: fix commands list print inside terminal
   	command.perform("terminal:execute", table.concat(cmd, " "))
   end
@@ -82,7 +82,7 @@ end
 
 -- Template selection
 local function select_template(template_name, project_title)
-  system.mkdir(wd .. "/" .. project_title)
+  system.mkdir(core.project_dir .. "/" .. project_title)
   local template_content = get_template(template_name)
   generate_template(template_name, project_title, template_content)
 end
@@ -123,7 +123,7 @@ local function project_template_manager()
       core.command_view:enter("Choose project title", {
         submit = function(project_title)
           -- Check if folder already exists
-          if system.get_file_info(wd .. project_title) == nil then
+          if system.get_file_info(core.project_dir .. project_title) == nil then
             -- Submit chosen template for selection
             select_template(template_name, project_title)
           else

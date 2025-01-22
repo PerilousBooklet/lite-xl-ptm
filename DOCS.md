@@ -13,7 +13,7 @@ TODO
 
 Example module:
 
-`ptm_example.lua`
+`example.lua`
 
 ```lua
 -- mod-version:3
