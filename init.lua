@@ -5,10 +5,12 @@ local command = require "core.command"
 local common = require "core.common"
 local config = require "core.config"
 local keymap = require "core.keymap"
--- local www = require "libraries.www"
+local www = require "libraries.www"
 local terminal = require "plugins.terminal"
 
 local ptm = {}
+
+-- FUTURE_TODO: after PROJECT REWORK is complete, use core.root_project().path instead of core.project_dir
 
 -- Configuration Options
 config.plugins.ptm = common.merge({
@@ -17,7 +19,6 @@ config.plugins.ptm = common.merge({
 
 -- Functions
 local templates = {}
--- FUTURE_TODO: after PROJECT REWORK is complete, use core.root_project().path instead of core.project_dir
 
 -- NOTE: this function will return the first template that matches
 local function get_template(template_name)
@@ -39,15 +40,17 @@ local function create_and_fill_file(project_title, dir, file_name, file_content)
 end
 
 -- Download a file with lite-xl-www
--- FIX: cannot set undefined var connection ...
+-- WIP: fix, cannot set undefined var connection ...
 -- local agent = www.new()
 -- local function download_file(file, filename)
 --   local f = io.open(filename, "wb")
---   agent:get(file, {
---     response = function(response, chunk)
---       f:write(chunk)
---     end
---   })
+--   core.add_thread(function()
+--     agent:get(file, {
+--       response = function(response, chunk)
+--         f:write(chunk)
+--       end
+--     })
+--   end)
 -- end
 
 -- Template generation
@@ -63,9 +66,9 @@ local function generate_template(template_name, project_title, template_content)
   -- Download external libraries
   for k, lib in pairs(template_content.ext_libs) do
     system.chdir(core.project_dir .. "/" .. project_title .. "/" .. lib.path)
-    --download_file(lib.url, lib.filename)
+    -- FUTURE_TODO: Add download status in StatusView
     -- TODO: Add timely queue for executing generation functions (es. no more sleep 3)
-    -- TODO: Add download status in StatusView
+    -- download_file(lib.url, lib.filename)
     process.start({ "wget", lib.url })
   end
   -- Create and fill config files for the LSP server

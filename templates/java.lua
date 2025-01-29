@@ -4,7 +4,7 @@ local ptm = require 'plugins.ptm'
 -- This module installs 3 templates:
 -- 1. Java, Simple (line 9)
 -- 2. Java, Gradle (line 75)
--- 3. Java, Maven, quickstart (line 116)
+-- 3. Java, Maven, Quickstart (line 116)
 
 -- Java, Simple
 local readme = [[
@@ -73,7 +73,6 @@ ptm.add_template() {
 }
 
 -- Java, Gradle
-
 local build_gradle = [[
 #!/usr/bin/bash
 ./gradlew run
@@ -113,8 +112,7 @@ ptm.add_template() {
   }
 }
 
--- Java, Maven, quickstart
-
+-- Java, Maven, Quickstart
 local setup_maven_quickstart = [[
 #!/usr/bin/bash
 mvn -B archetype:generate \
