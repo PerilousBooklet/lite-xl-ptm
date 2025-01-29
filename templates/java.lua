@@ -1,10 +1,39 @@
 -- mod-version:3
 local ptm = require 'plugins.ptm'
 
--- This module installs 3 templates:
--- 1. Java, Simple (line 9)
--- 2. Java, Gradle (line 75)
--- 3. Java, Maven, Quickstart (line 116)
+-- This module installs 4 templates:
+-- 1. Java, Tiny (line 10)
+-- 2. Java, Simple (line 41)
+-- 3. Java, Gradle (line 107)
+-- 4. Java, Maven, Quickstart (line 147)
+
+-- Java, Tiny
+local run_tiny = [[
+#!/bin/bash
+javac Main.java
+java Main
+]]
+
+ptm.add_template() {
+  name = "java-tiny",
+  desc = "A tiny template for quickly testing Java code.",
+  files = {
+    ["run.sh"] = {
+      content = run_tiny,
+      path = ""
+    },
+    ["Main.java"] = {
+      content = "",
+      path = ""
+    }
+  },
+  dirs = {},
+  ext_libs = {},
+  lsp_config_files = {},
+  commands = {
+    { "chmod", "+x", "run.sh" }
+  }
+}
 
 -- Java, Simple
 local readme = [[
