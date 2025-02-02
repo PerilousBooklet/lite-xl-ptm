@@ -156,7 +156,7 @@ sed -i 's/<maven.compiler.target>1.7/<maven.compiler.target>1.8/g' ./example/pom
 cp -v ./build.sh ./example/build.sh
 ]]
 
-local build_maven = [[
+local build_maven_quickstart = [[
 #!/usr/bin/bash
 mvn compile
 mvn test
@@ -177,7 +177,7 @@ ptm.add_template() {
       path = ""
     },
     ["build.sh"] = {
-      content = build_maven,
+      content = build_maven_quickstart,
       path = ""
     },
   },
