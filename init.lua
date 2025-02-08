@@ -25,18 +25,24 @@ local function get_template(template_name)
 	local template = nil
 	for _, v in pairs(templates) do
 		if template_name == v.name then
-			template = v
+			core.log("Template found: " .. template_name)
+			return v
 		end
 	end
-	return template
+	core.log("Template not found: " .. template_name)
+	return nil
 end
 
 -- Creates and fills a file
 local function create_and_fill_file(project_title, dir, file_name, file_content)
 	system.mkdir(core.project_dir .. "/" .. project_title .. "/" .. dir)
 	local f = io.open(core.project_dir .. "/" .. project_title .. "/" .. dir .. "/" .. file_name, "w")
-  f:write(file_content)
-  f:close()
+  if f then
+    f:write(file_content)
+    f:close()
+  else
+    core.log("Error: could not open file: " .. file_name)
+  end
 end
 
 -- Download a file with lite-xl-www
@@ -79,7 +85,10 @@ local function generate_template(template_name, project_title, template_content)
   for k, cmd in pairs(template_content.commands) do
   	system.chdir(core.project_dir .. "/" .. project_title)
   	-- FIX: fix commands list print inside terminal
+  	core.log("Executing command: " .. table.concat(cmd, " "))
   	command.perform("terminal:execute", table.concat(cmd, " "))
+  	-- process.start({ "xdg-run", table.concat(cmd, " ")})
+  	core.log("Command executed: " .. table.concat(cmd, " "))
   end
 end
 
@@ -87,7 +96,12 @@ end
 local function select_template(template_name, project_title)
   system.mkdir(core.project_dir .. "/" .. project_title)
   local template_content = get_template(template_name)
-  generate_template(template_name, project_title, template_content)
+  if template_content then
+    core.log("Template found: " .. template_name)
+    generate_template(template_name, project_title, template_content)
+  else
+    core.log("Error: template not found!")
+  end
 end
 
 -- Main
@@ -126,7 +140,7 @@ local function project_template_manager()
       core.command_view:enter("Choose project title", {
         submit = function(project_title)
           -- Check if folder already exists
-          if system.get_file_info(core.project_dir .. project_title) == nil then
+          if system.get_file_info(core.project_dir .. "/" .. project_title) == nil then
             -- Submit chosen template for selection
             select_template(template_name, project_title)
           else

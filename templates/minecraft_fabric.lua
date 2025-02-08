@@ -61,6 +61,9 @@ local mdks = {
 for _, v in pairs(mdks) do
   -- Extract Fabric version from URL
   local fabric_ver_temp = string.match(v.file, "%/%d+%.%d+")
+  if not fabric_ver_temp then
+    core.log("Error: Fabric version not found in URL: " .. v.file)
+  end
   local fabric_ver = string.gsub(fabric_ver_temp, "/", "")
   -- Assign JDK version
   local run_script = string.gsub(file1, "sss", v.jre_ver)

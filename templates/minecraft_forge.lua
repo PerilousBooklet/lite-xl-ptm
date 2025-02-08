@@ -99,7 +99,7 @@ for _, v in pairs(mdks) do
     lsp_config_files = {},
     commands = {
       -- Wait until the archive is fully downloaded
-      { "sleep 10" },
+      { "sleep 20" },
       -- Setup mod development kit
       { "mkdir", "-v", "src" },
       { "unzip", string.format("forge-%s-%s-mdk.zip", minecraft_ver, forge_ver), "-d", "./src" },
