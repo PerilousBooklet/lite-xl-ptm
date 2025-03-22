@@ -12,6 +12,10 @@ A plugin for Lite XL that generates project templates for programming languages.
 > [!WARNING]
 > At the moment the functionality for downloading dependency is broken, a FIX is WIP
 
+> [!WARNING]
+> At the moment the command running functionality is broken because of a (possible) bug in the `terminal` plugin.
+> So the scripts will need to be assigned exec properties manually with `chmod +x scriptname.sh`
+
 ## Documentation
 
 <!-- TODO: write docs for how functions work -->

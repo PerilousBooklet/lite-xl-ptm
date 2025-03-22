@@ -17,6 +17,16 @@ int main() {
 }
 ]]
 
+local file2 = [[
+-- debugger config
+config.target_binary = ""
+]]
+
+local file3 = [[
+-- build config
+-- ?
+]]
+
 ptm.add_template() {
   name = "c-simple",
   desc = "A simple C project.",

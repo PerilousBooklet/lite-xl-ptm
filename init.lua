@@ -5,7 +5,7 @@ local command = require "core.command"
 local common = require "core.common"
 local config = require "core.config"
 local keymap = require "core.keymap"
-local www = require "libraries.www"
+-- local www = require "libraries.www"
 local terminal = require "plugins.terminal"
 
 local ptm = {}
@@ -14,8 +14,11 @@ local ptm = {}
 
 -- Configuration Options
 config.plugins.ptm = common.merge({
-  -- ?
+  -- Terminal Emulator of choice
+  terminal_emulator = "alacritty"
 }, config.plugins.ptm)
+
+-- TODO: Message View
 
 -- Functions
 local templates = {}
@@ -35,11 +38,12 @@ end
 
 -- Creates and fills a file
 local function create_and_fill_file(project_title, dir, file_name, file_content)
-	system.mkdir(core.project_dir .. "/" .. project_title .. "/" .. dir)
+	core.log("Create folder: " .. core.project_dir .. "/" .. project_title .. "/" .. dir)
 	local f = io.open(core.project_dir .. "/" .. project_title .. "/" .. dir .. "/" .. file_name, "w")
   if f then
     f:write(file_content)
     f:close()
+    core.log("Created file: " .. core.project_dir .. "/" .. project_title .. "/" .. dir .. "/" .. file_name)
   else
     core.log("Error: could not open file: " .. file_name)
   end
@@ -61,20 +65,20 @@ end
 
 -- Template generation
 local function generate_template(template_name, project_title, template_content)
-	-- Create and fill files
-	for k, file in pairs(template_content.files) do
-  	create_and_fill_file(project_title, file.path, k, file.content)
-  end
   -- Create directories
   for k, dir in pairs(template_content.dirs) do
   	system.mkdir(core.project_dir .. "/" .. project_title .. "/" .. dir .. "/")
   end
+	-- Create and fill files
+	for k, file in pairs(template_content.files) do
+  	create_and_fill_file(project_title, file.path, k, file.content)
+  end
   -- Download external libraries
   for k, lib in pairs(template_content.ext_libs) do
     system.chdir(core.project_dir .. "/" .. project_title .. "/" .. lib.path)
+    -- download_file(lib.url, lib.filename)
     -- FUTURE_TODO: Add download status in StatusView
     -- TODO: Add timely queue for executing generation functions (es. no more sleep 3)
-    -- download_file(lib.url, lib.filename)
     process.start({ "wget", lib.url })
   end
   -- Create and fill config files for the LSP server
@@ -84,12 +88,12 @@ local function generate_template(template_name, project_title, template_content)
   -- Run commands
   for k, cmd in pairs(template_content.commands) do
   	system.chdir(core.project_dir .. "/" .. project_title)
-  	-- FIX: fix commands list print inside terminal
-  	core.log("Executing command: " .. table.concat(cmd, " "))
+  	-- WIP: searching for terminal bug that prevents running commands
+  	-- print(pcall(command.perform("terminal:execute", table.concat(cmd, " "))))
   	command.perform("terminal:execute", table.concat(cmd, " "))
-  	-- process.start({ "xdg-run", table.concat(cmd, " ")})
-  	core.log("Command executed: " .. table.concat(cmd, " "))
   end
+  -- TODO: message window (it's an emptyview with a title and a text paragraph)
+  -- example: for java, maven, quickstart: tell user to go to build.sh and specify author name and project title
 end
 
 -- Template selection
@@ -104,13 +108,14 @@ local function select_template(template_name, project_title)
   end
 end
 
--- Main
+-- ?
 function ptm.add_template()
 	return function (t)
     table.insert(templates, t)
   end
 end
 
+-- ?
 local function parse_list()
 	local list = system.list_dir(USERDIR .. "/plugins/ptm/templates")
   local list_matched = {}
@@ -122,6 +127,7 @@ local function parse_list()
   return list_matched
 end
 
+-- ?
 function ptm.load()
   -- Get template filenames
   local templates_list = parse_list()
@@ -131,6 +137,7 @@ function ptm.load()
   end
 end
 
+-- Main
 local function project_template_manager()
   -- Get input for template name
   core.command_view:enter("Choose template", {
@@ -156,20 +163,20 @@ local function project_template_manager()
       for k, v in pairs(templates) do
         table.insert(template_list, v["name"])
       end
-      -- Match current input with templates names
+      -- Match current input with templates' names
       return common.fuzzy_match(template_list, template_name)
     end
   })
 end
 
--- Commands
+-- Command
 command.add(nil, {
   ["ptm:choose-template"] = function ()
     project_template_manager()
   end
 })
 
--- Key bindings
+-- Key binding
 keymap.add {
   ["alt+p"] = "ptm:choose-template"
 }

@@ -7,6 +7,13 @@ local ptm = require 'plugins.ptm'
 -- 3. Java, Gradle (line 107)
 -- 4. Java, Maven, Quickstart (line 147)
 
+local readme = [[
+# Java Project
+
+...
+
+]]
+
 -- Java, Tiny
 local run_tiny = [[
 #!/bin/bash
@@ -36,13 +43,6 @@ ptm.add_template() {
 }
 
 -- Java, Simple
-local readme = [[
-# Java Project
-
-...
-
-]]
-
 local build_simple = [[
 #!/bin/bash
 
@@ -143,21 +143,28 @@ ptm.add_template() {
 
 -- Java, Maven, Quickstart
 local setup_maven_quickstart = [[
-#!/usr/bin/bash
+#!/bin/bash
+
+AUTHOR=""
+PROJECT_NAME=""
+
 mvn -B archetype:generate \
-    -DgroupId=com.mycompany.app \
-    -DartifactId=example \
+    -DgroupId=com.$AUTHOR.$PROJECT_NAME \
+    -DartifactId=$PROJECT_NAME \
     -DarchetypeArtifactId=maven-archetype-quickstart \
     -DarchetypeVersion=1.4
-# FIX
-sed -i 's/<maven.compiler.source>1.7/<maven.compiler.source>1.8/g' ./example/pom.xml
-sed -i 's/<maven.compiler.target>1.7/<maven.compiler.target>1.8/g' ./example/pom.xml
 
-cp -v ./build.sh ./example/build.sh
+sed -i 's/<maven.compiler.source>1.7/<maven.compiler.source>1.8/g' ./$PROJECT_NAME/pom.xml
+sed -i 's/<maven.compiler.target>1.7/<maven.compiler.target>1.8/g' ./$PROJECT_NAME/pom.xml
+
+sed -i "s/mycompany/$AUTHOR/g" ./build.sh
+sed -i "s/app/$PROJECT_NAME/g" ./build.sh
+
+cp -v ./build.sh ./$PROJECT_NAME/build.sh
 ]]
 
 local build_maven_quickstart = [[
-#!/usr/bin/bash
+#!/bin/bash
 mvn compile
 mvn test
 mvn package
@@ -179,7 +186,7 @@ ptm.add_template() {
     ["build.sh"] = {
       content = build_maven_quickstart,
       path = ""
-    },
+    }
   },
   dirs = {},
   ext_libs = {},
@@ -189,6 +196,6 @@ ptm.add_template() {
     { "chmod", "+x", "setup.sh" },
     { "chmod", "+x", "build.sh" },
     -- Setup project
-    { "./setup.sh" }
+    -- { "./setup.sh" }
   }
 }
