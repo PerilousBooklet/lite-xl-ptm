@@ -1,0 +1,18 @@
+@startuml
+
+!theme plain
+skinparam dpi 300
+
+' TODO: add Lite XL plugin loading sequence
+':
+':
+':
+':
+:command or keybinding;
+:project_template_manager();
+:select_template();
+:get_template();
+:generate_template();
+:create_and_fill_file();
+
+@enduml

@@ -88,7 +88,8 @@ local function generate_template(template_name, project_title, template_content)
   -- Run commands
   for k, cmd in pairs(template_content.commands) do
   	system.chdir(core.project_dir .. "/" .. project_title)
-  	-- WIP: searching for terminal bug that prevents running commands
+  	-- WIP: searching for terminal bug that prevents running commands (but it works in a bottle)
+  	-- NEED ADAM's OPINION!!!
   	-- print(pcall(command.perform("terminal:execute", table.concat(cmd, " "))))
   	command.perform("terminal:execute", table.concat(cmd, " "))
   end

@@ -16,8 +16,21 @@ A plugin for Lite XL that generates project templates for programming languages.
 > At the moment the command running functionality is broken because of a (possible) bug in the `terminal` plugin.
 > So the scripts will need to be assigned exec properties manually with `chmod +x scriptname.sh`
 
+## How to install
+
+Install the [Lite XL package manager](https://github.com/lite-xl/lite-xl-plugin-manager?tab=readme-ov-file#installing) and run `lpm install ptm`.
+
+Then open the `~/.config/lite-xl/init.lua` file and add the following:
+
+```lua
+local ptm = require "plugins.ptm"
+ptm.load()
+```
+
+to load the template modules into Lite XL.
+
 ## Documentation
 
 <!-- TODO: write docs for how functions work -->
-You can find the documentation [here](./DOCS.md)
+You can find the documentation [here](./docs/DOCS.md)
 
