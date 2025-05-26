@@ -89,8 +89,8 @@ local function generate_template(template_name, project_title, template_content)
   for k, cmd in pairs(template_content.commands) do
   	system.chdir(core.project_dir .. "/" .. project_title)
   	-- WIP: searching for terminal bug that prevents running commands (but it works in a bottle)
-  	-- NEED ADAM's OPINION!!!
-  	-- print(pcall(command.perform("terminal:execute", table.concat(cmd, " "))))
+  	-- WHAT HAPPENS: commands run only when running lite-xl from lpm
+  	print(pcall(command.perform("terminal:execute", table.concat(cmd, " "))))
   	command.perform("terminal:execute", table.concat(cmd, " "))
   end
   -- TODO: message window (it's an emptyview with a title and a text paragraph)

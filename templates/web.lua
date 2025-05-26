@@ -6,6 +6,7 @@ local ptm = require 'plugins.ptm'
 -- 2. Simple static website (line 43)
 
 -- Tiny website
+-- FIX: the terminal shows twice the commands to run
 local run_tiny = [[
 #!/bin/bash
 firefox index.html
