@@ -98,7 +98,7 @@ for _, v in pairs(mdks) do
     },
     lsp_config_files = {},
     commands = {
-      -- Wait until the archive is fully downloaded
+      -- FIX: Wait until the archive is fully downloaded
       { "sleep 20" },
       -- Setup mod development kit
       { "mkdir", "-v", "src" },

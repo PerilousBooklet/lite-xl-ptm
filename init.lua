@@ -5,25 +5,21 @@ local command = require "core.command"
 local common = require "core.common"
 local config = require "core.config"
 local keymap = require "core.keymap"
--- local www = require "libraries.www"
-local terminal = require "plugins.terminal"
+local www = require "libraries.www"
 
 local ptm = {}
 
 -- FUTURE_TODO: after PROJECT REWORK is complete, use core.root_project().path instead of core.project_dir
+-- FIX: after creating a new project, you can't save currently opened files from current working dir
 
 -- Configuration Options
 config.plugins.ptm = common.merge({
-  -- Terminal Emulator of choice
-  terminal_emulator = "alacritty"
+  -- ?
 }, config.plugins.ptm)
 
--- TODO: Message View
-
--- Functions
 local templates = {}
 
--- NOTE: this function will return the first template that matches
+-- Return the first matching template
 local function get_template(template_name)
 	local template = nil
 	for _, v in pairs(templates) do
@@ -36,7 +32,7 @@ local function get_template(template_name)
 	return nil
 end
 
--- Creates and fills a file
+-- Create and fill file
 local function create_and_fill_file(project_title, dir, file_name, file_content)
 	core.log("Create folder: " .. core.project_dir .. "/" .. project_title .. "/" .. dir)
 	local f = io.open(core.project_dir .. "/" .. project_title .. "/" .. dir .. "/" .. file_name, "w")
@@ -49,19 +45,19 @@ local function create_and_fill_file(project_title, dir, file_name, file_content)
   end
 end
 
--- Download a file with lite-xl-www
+-- Download remote file
 -- WIP: fix, cannot set undefined var connection ...
--- local agent = www.new()
--- local function download_file(file, filename)
---   local f = io.open(filename, "wb")
---   core.add_thread(function()
---     agent:get(file, {
---       response = function(response, chunk)
---         f:write(chunk)
---       end
---     })
---   end)
--- end
+local agent = www.new()
+local function download_file(file, filename)
+  local f = io.open(filename, "wb")
+  core.add_thread(function()
+    agent:get(file, {
+      response = function(response, chunk)
+        f:write(chunk)
+      end
+    })
+  end)
+end
 
 -- Template generation
 local function generate_template(template_name, project_title, template_content)
@@ -76,25 +72,28 @@ local function generate_template(template_name, project_title, template_content)
   -- Download external libraries
   for k, lib in pairs(template_content.ext_libs) do
     system.chdir(core.project_dir .. "/" .. project_title .. "/" .. lib.path)
-    -- download_file(lib.url, lib.filename)
-    -- FUTURE_TODO: Add download status in StatusView
-    -- TODO: Add timely queue for executing generation functions (es. no more sleep 3)
-    process.start({ "wget", lib.url })
+    -- FUTURE_TODO: Add download status in StatusView (use log messages)
+    -- WIP: commands should run only when the deps are finished downloading
+    -- EXAMPLE FROM ADAM:
+    -- core.add_thread(function()
+    --   local result1 = process.start({ "process1" }).stdout:read("*all")
+    --   local result2 = process.start({ "process2" }).stdout:read("*all")   
+    -- end)
+    core.add_thread(function ()
+    	process.start({ "wget", lib.url })
+    	-- download_file(lib.url, lib.filename)
+    end)
   end
-  -- Create and fill config files for the LSP server
+  -- Create and fill config files for LSP servers
   for k, file in pairs(template_content.lsp_config_files) do
   	create_and_fill_file(project_title, file.path, k, file.content)
   end
   -- Run commands
   for k, cmd in pairs(template_content.commands) do
   	system.chdir(core.project_dir .. "/" .. project_title)
-  	-- WIP: searching for terminal bug that prevents running commands (but it works in a bottle)
-  	-- WHAT HAPPENS: commands run only when running lite-xl from lpm
-  	print(pcall(command.perform("terminal:execute", table.concat(cmd, " "))))
   	command.perform("terminal:execute", table.concat(cmd, " "))
   end
-  -- TODO: message window (it's an emptyview with a title and a text paragraph)
-  -- example: for java, maven, quickstart: tell user to go to build.sh and specify author name and project title
+  -- TODO: add Lite XL project file (es. for integration with build/debugger plugins)
 end
 
 -- Template selection
@@ -109,14 +108,14 @@ local function select_template(template_name, project_title)
   end
 end
 
--- ?
+-- Add a template table to the templates table
 function ptm.add_template()
 	return function (t)
     table.insert(templates, t)
   end
 end
 
--- ?
+-- Get list of template files
 local function parse_list()
 	local list = system.list_dir(USERDIR .. "/plugins/ptm/templates")
   local list_matched = {}
@@ -128,7 +127,7 @@ local function parse_list()
   return list_matched
 end
 
--- ?
+-- Load templates
 function ptm.load()
   -- Get template filenames
   local templates_list = parse_list()
@@ -144,12 +143,12 @@ local function project_template_manager()
   core.command_view:enter("Choose template", {
     -- Submit the desired template name
     submit = function(template_name)
-      -- Get input for project folder title
+      -- Get input for project title
       core.command_view:enter("Choose project title", {
         submit = function(project_title)
+          -- TODO: prompt for more data, es. author name (es. for Maven)
           -- Check if folder already exists
           if system.get_file_info(core.project_dir .. "/" .. project_title) == nil then
-            -- Submit chosen template for selection
             select_template(template_name, project_title)
           else
             core.log("WARNING: a folder with this title exists already!")
@@ -160,11 +159,9 @@ local function project_template_manager()
     -- Suggest template names
     suggest = function(template_name)
       local template_list = {}
-      -- Get list of template names
       for k, v in pairs(templates) do
         table.insert(template_list, v["name"])
       end
-      -- Match current input with templates' names
       return common.fuzzy_match(template_list, template_name)
     end
   })

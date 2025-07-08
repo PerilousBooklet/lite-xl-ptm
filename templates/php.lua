@@ -13,9 +13,7 @@ composer require erusev/parsedown
 
 local file2 = [[
 #!/bin/bash
-tmux new -s blog -d
-tmux send-keys -t  'php --server localhost:2345 --docroot ./src/ && tmux kill-session -t blog' C-m
-tmux attach -t blog
+php --server localhost:2345 --docroot ./src/
 ]]
 
 local indexhtml = [[

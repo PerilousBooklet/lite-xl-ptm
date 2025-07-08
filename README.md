@@ -4,29 +4,30 @@
 
 ![ptm-2](https://github.com/user-attachments/assets/34b26daa-e4e5-4332-a8aa-9ebdeaf8c1a8)
 
-A plugin for Lite XL that generates project templates for programming languages.
+A project template manager plugin for Lite XL.
 
 > [!NOTE]
-> At the moment this plugin is LINUX ONLY
+> At the moment this plugin is LINUX ONLY.
 
 > [!WARNING]
-> At the moment the functionality for downloading dependency is broken, a FIX is WIP
+> At the moment the functionality for downloading dependencies is broken, a FIX is WIP.
 
 ## How to install
 
-Install the [Lite XL package manager](https://github.com/lite-xl/lite-xl-plugin-manager?tab=readme-ov-file#installing) and run `lpm install ptm`.
+Install the [Lite XL package manager](https://github.com/lite-xl/lite-xl-plugin-manager?tab=readme-ov-file#installing).
 
-Then open the `~/.config/lite-xl/init.lua` file and add the following:
+Run `lpm install ptm`.
+
+Load the template modules into Lite XL: 
+
+> `~/.config/lite-xl/init.lua`
 
 ```lua
 local ptm = require "plugins.ptm"
 ptm.load()
 ```
 
-to load the template modules into Lite XL.
-
 ## Documentation
 
 <!-- TODO: write docs for how functions work -->
-You can find the documentation [here](./docs/DOCS.md)
-
+You can find the documentation [here](./DOCS.md)

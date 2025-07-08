@@ -3,9 +3,9 @@ local ptm = require 'plugins.ptm'
 
 -- This module installs 4 templates:
 -- 1. Java, Tiny (line 17)
--- 2. Java, Simple (line 45)
--- 3. Java, Gradle (line 104)
--- 4. Java, Maven, Quickstart (line 144)
+-- 2. Java, Simple (line 57)
+-- 3. Java, Gradle (line 116)
+-- 4. Java, Maven, Quickstart (line 156)
 
 local readme = [[
 # Java Project
@@ -33,7 +33,7 @@ public class Main {
 
 ptm.add_template() {
   name = "java-tiny",
-  desc = "A tiny template for quick testing or running tiny programs.",
+  desc = "A tiny template for quickly testing or running tiny Java programs.",
   files = {
     ["run.sh"] = {
       content = run_tiny,
@@ -155,32 +155,30 @@ ptm.add_template() {
 
 -- Java, Maven, Quickstart
 local setup_maven_quickstart = [[
-#!/bin/bash
+#!/usr/bin/bash
 
-AUTHOR=""
-PROJECT_NAME=""
-
+# Generate base project
 mvn -B archetype:generate \
-    -DgroupId=com.$AUTHOR.$PROJECT_NAME \
-    -DartifactId=$PROJECT_NAME \
+    -DgroupId=com.perilousbooklet.app \
+    -DartifactId=src \
     -DarchetypeArtifactId=maven-archetype-quickstart \
     -DarchetypeVersion=1.4
 
-sed -i 's/<maven.compiler.source>1.7/<maven.compiler.source>1.8/g' ./$PROJECT_NAME/pom.xml
-sed -i 's/<maven.compiler.target>1.7/<maven.compiler.target>1.8/g' ./$PROJECT_NAME/pom.xml
+# FIX
+sed -i 's/<maven.compiler.source>1.7/<maven.compiler.source>1.8/g' ./src/pom.xml
+sed -i 's/<maven.compiler.target>1.7/<maven.compiler.target>1.8/g' ./src/pom.xml
 
-sed -i "s/mycompany/$AUTHOR/g" ./build.sh
-sed -i "s/app/$PROJECT_NAME/g" ./build.sh
-
-cp -v ./build.sh ./$PROJECT_NAME/build.sh
-]]
-
-local build_maven_quickstart = [[
-#!/bin/bash
+# Create and fill build script
+touch ./src/build.sh
+cat << EOT > ./src/build.sh
+#!/usr/bin/bash
 mvn compile
 mvn test
+mvn clean
 mvn package
-mvn exec:java -Dexec.mainClass="com.mycompany.app.App"
+mvn exec:java -Dexec.mainClass="com.perilousbooklet.app.App"
+EOT
+chmod +x build.sh
 ]]
 
 ptm.add_template() {
@@ -194,10 +192,6 @@ ptm.add_template() {
     ["setup.sh"] = {
       content = setup_maven_quickstart,
       path = ""
-    },
-    ["build.sh"] = {
-      content = build_maven_quickstart,
-      path = ""
     }
   },
   dirs = {},
@@ -208,6 +202,6 @@ ptm.add_template() {
     { "chmod", "+x", "setup.sh" },
     { "chmod", "+x", "build.sh" },
     -- Setup project
-    -- { "./setup.sh" }
+    { "./setup.sh" }
   }
 }

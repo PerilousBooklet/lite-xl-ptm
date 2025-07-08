@@ -1,13 +1,10 @@
 -- mod-version:3
 local ptm = require 'plugins.ptm'
 
-local file0 = [[
-# Simple C project
+-- This module installs 1 template:
+-- 1. C, Tiny (line 7)
 
-...
-
-]]
-
+-- C, Tiny
 local file1 = [[
 #include <stdio.h>
 
@@ -17,24 +14,10 @@ int main() {
 }
 ]]
 
-local file2 = [[
--- debugger config
-config.target_binary = ""
-]]
-
-local file3 = [[
--- build config
--- ?
-]]
-
 ptm.add_template() {
   name = "c-simple",
   desc = "A simple C project.",
   files = {
-    ["README.md"] = {
-      content = file0,
-      path = ""
-    },
     ["main.c"] = {
       content = file1,
       path = "src"
