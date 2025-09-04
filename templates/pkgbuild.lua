@@ -1,7 +1,7 @@
 -- mod-version:3
 local ptm = require 'plugins.ptm'
 
--- This module installs 1 template:
+-- Templates
 -- 1. PKGBUILD, Base (line 7)
 -- TODO: 2. PKGBUILD, arch-chroot
 -- TODO: 3. PKGBUILD, arch-nspawn

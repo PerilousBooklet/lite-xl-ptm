@@ -12,6 +12,10 @@ local ptm = {}
 -- FUTURE_TODO: after PROJECT REWORK is complete, use core.root_project().path instead of core.project_dir
 -- FIX: after creating a new project, you can't save currently opened files from current working dir
 
+-- TODO: specify project template parameters (author name, url, ...; list of dependencies, specific remote file urls for dependencies, ...)
+--       (just write all the arguments inside the commandview input field, but separate them with a specific character, es. ; or |)
+--       (remember to explain somewhere (README ?) this functionality!!!)
+
 -- Configuration Options
 config.plugins.ptm = common.merge({
   -- ?
@@ -40,6 +44,18 @@ local function create_and_fill_file(project_title, dir, file_name, file_content)
     f:write(file_content)
     f:close()
     core.log("Created file: " .. core.project_dir .. "/" .. project_title .. "/" .. dir .. "/" .. file_name)
+  else
+    core.log("Error: could not open file: " .. file_name)
+  end
+end
+
+-- Create and fill single file (for single-file templates)
+local function create_and_fill_single_file(file_name, file_content)
+	local f = io.open(core.project_dir .. "/" .. file_name, "w")
+  if f then
+    f:write(file_content)
+    f:close()
+    core.log("Created file: " .. core.project_dir .. "/" .. file_name)
   else
     core.log("Error: could not open file: " .. file_name)
   end
@@ -108,6 +124,20 @@ local function select_template(template_name, project_title)
   end
 end
 
+-- Select single-file template
+local function select_single_file_template(template_name)
+  local template_content = get_template(template_name)
+  if template_content then
+    core.log("Template found: " .. template_name)
+    -- Create and fill single files
+    for k, file in pairs(template_content.files) do
+      create_and_fill_single_file(k, file.content)
+    end
+  else
+    core.log("Error: template not found!")
+  end
+end
+
 -- Add a template table to the templates table
 function ptm.add_template()
 	return function (t)
@@ -143,18 +173,23 @@ local function project_template_manager()
   core.command_view:enter("Choose template", {
     -- Submit the desired template name
     submit = function(template_name)
-      -- Get input for project title
-      core.command_view:enter("Choose project title", {
-        submit = function(project_title)
-          -- TODO: prompt for more data, es. author name (es. for Maven)
-          -- Check if folder already exists
-          if system.get_file_info(core.project_dir .. "/" .. project_title) == nil then
-            select_template(template_name, project_title)
-          else
-            core.log("WARNING: a folder with this title exists already!")
+      -- For single-file templates
+      if string.find(template_name, "(single)") then
+      	select_single_file_template(template_name)
+      -- For complex project templates
+      else
+        core.command_view:enter("Choose project title", {
+          submit = function(project_title)
+            -- TODO: prompt for more data (use one more commandview, use ; or | to separate arguments)
+            -- Check if folder already exists
+            if system.get_file_info(core.project_dir .. "/" .. project_title) == nil then
+              select_template(template_name, project_title)
+            else
+              core.log("WARNING: a folder with this title exists already!")
+            end
           end
-        end
-      })
+        })
+      end
     end,
     -- Suggest template names
     suggest = function(template_name)

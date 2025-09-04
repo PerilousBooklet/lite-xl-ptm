@@ -4,7 +4,7 @@ local ptm = require 'plugins.ptm'
 -- Template Reference
 -- ?
 
--- This module installs several templates:
+-- Templates:
 -- 1. LaTeX, article (line 20)
 -- 2. LaTeX, book (line 83)
 -- 3. LaTeX, presentation (line )

@@ -1,7 +1,7 @@
 -- mod-version:3
 local ptm = require 'plugins.ptm'
 
--- This module installs 1 template:
+-- Templates:
 -- 1. PHP, Simple Webapp
 
 -- PHP, Simple Webapp
@@ -39,7 +39,7 @@ local indexphp = [[
 ]]
 
 ptm.add_template() {
-  name = "php-local-webapp",
+  name = "php-simple-webapp",
   desc = "A local self-hosted webapp.",
   files = {
     ["setup.sh"] = {

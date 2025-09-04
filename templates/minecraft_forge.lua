@@ -1,4 +1,5 @@
 -- mod-version:3
+local core = require "core"
 local ptm = require 'plugins.ptm'
 
 local file0 = [[
@@ -65,8 +66,11 @@ local mdks = {
 for _, v in pairs(mdks) do
   -- Extract Minecraft and Forge versions from URL
 	local minecraft_ver_temp = string.match(v.file, "%/%d+%.%d+%.%d+%.?%d*")
-  local forge_ver_temp = string.match(v.file, "%-%d+%.%d+%.%d+%.?%d*")
   local minecraft_ver = string.gsub(minecraft_ver_temp, "/", "")
+  local forge_ver_temp = string.match(v.file, "%-%d+%.%d+%.%d+%.?%d*")
+  if not forge_ver_temp then
+    core.log("Error: Forge version not found in URL: " .. v.file)
+  end
   local forge_ver = string.gsub(forge_ver_temp, "-", "")
   -- Assign JDK version
   local run_script = string.gsub(file1, "sss", v.jre_ver)
@@ -91,9 +95,9 @@ for _, v in pairs(mdks) do
     dirs = {},
     ext_libs = {
       {
-        filename = string.format("forge-%s-%s-mdk.zip", minecraft_ver, forge_ver),
         url = v.file,
-        path = ""
+        path = "",
+        filename = string.format("forge-%s-%s-mdk.zip", minecraft_ver, forge_ver)
       }
     },
     lsp_config_files = {},

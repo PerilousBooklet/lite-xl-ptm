@@ -1,7 +1,7 @@
 -- mod-version:3
 local ptm = require 'plugins.ptm'
 
--- This module installs 1 template:
+-- Templates:
 -- 1. Lua, Tiny (line 7)
 
 -- Lua, Tiny

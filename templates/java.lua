@@ -1,7 +1,7 @@
 -- mod-version:3
 local ptm = require 'plugins.ptm'
 
--- This module installs 4 templates:
+-- Templates:
 -- 1. Java, Tiny (line 17)
 -- 2. Java, Simple (line 57)
 -- 3. Java, Gradle (line 116)
@@ -178,7 +178,12 @@ mvn clean
 mvn package
 mvn exec:java -Dexec.mainClass="com.perilousbooklet.app.App"
 EOT
-chmod +x build.sh
+chmod +x ./src/build.sh
+]]
+local run_maven_quickstart = [[
+#!/usr/bin/bash
+cd ./src || exit
+./build.sh
 ]]
 
 ptm.add_template() {
@@ -192,6 +197,10 @@ ptm.add_template() {
     ["setup.sh"] = {
       content = setup_maven_quickstart,
       path = ""
+    },
+    ["run.sh"] = {
+      content = run_maven_quickstart,
+      path = ""
     }
   },
   dirs = {},
@@ -200,7 +209,7 @@ ptm.add_template() {
   commands = {
     -- Make files executable
     { "chmod", "+x", "setup.sh" },
-    { "chmod", "+x", "build.sh" },
+    { "chmod", "+x", "run.sh" },
     -- Setup project
     { "./setup.sh" }
   }

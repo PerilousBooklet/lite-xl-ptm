@@ -32,9 +32,10 @@ ptm.add_template() {
     ".dirr" .. "/" .. ".dirrr"
   },
   ext_libs = {
-    ["1.21.zip"] = {
+    {
       url = "https://github.com/FabricMC/fabric-example-mod/archive/refs/heads/1.21.zip",
-      path = ""
+      path = "",
+      filename = "1.21.zip"
     }
   },
   lsp_config_files = {
@@ -43,6 +44,14 @@ ptm.add_template() {
       content = file2
     }
   },
+  -- WIP: insert dependencies into build tools' config files (?)
+  -- dependencies = {
+  --   {
+  --     url = "",
+  --     path = "",
+  --     filename = ""
+  --   }
+  -- },
   commands = {
     { "touch", "example.txt" }
   }

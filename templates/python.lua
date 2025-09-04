@@ -1,8 +1,9 @@
 -- mod-version:3
 local ptm = require 'plugins.ptm'
 
--- This module installs 1 template:
+-- Templates:
 -- 1. Python, Tiny (line 7)
+-- 2. Python, Flask (line 50)
 
 -- Python, Tiny
 local setup_tiny = [[
@@ -45,3 +46,6 @@ ptm.add_template {
     }
   }
 }
+
+-- WIP: 2. Python, Flask
+

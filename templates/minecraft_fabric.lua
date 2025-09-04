@@ -1,4 +1,5 @@
 -- mod-version:3
+local core = require "core"
 local ptm = require 'plugins.ptm'
 
 local file0 = [[
@@ -93,9 +94,9 @@ for _, v in pairs(mdks) do
     dirs = {},
     ext_libs = {
       {
-        filename = string.format("%s.zip", fabric_ver),
         url = v.file,
-        path = ""
+        path = "",
+        filename = string.format("%s.zip", fabric_ver)
       }
     },
     lsp_config_files = {},

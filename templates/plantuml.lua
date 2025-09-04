@@ -4,7 +4,7 @@ local ptm = require 'plugins.ptm'
 -- Template Reference
 -- https://plantuml.com/
 
--- This module installs several templates:
+-- Templates:
 -- 1. PlantUML, UML diagram (sequence, usecase, class, activity, component, statemachine, object, deployment, timing, network, archimate)
 -- 2. PlantUML, ER Diagram
 -- 3. PlantUML, RegEx

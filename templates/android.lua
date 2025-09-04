@@ -1,7 +1,7 @@
 -- mod-version:3
 local ptm = require 'plugins.ptm'
 
--- This module installs 2 templates:
+-- Templates:
 -- 1. Android, Android Views, Base (line ?)
 -- 2. Android, jetpack Compose, Base (line ?)
 

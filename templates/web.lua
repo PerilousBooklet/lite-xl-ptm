@@ -1,7 +1,7 @@
 -- mod-version:3
 local ptm = require 'plugins.ptm'
 
--- This module installs ? templates:
+-- Templates:
 -- 1. Tiny website (line 8)
 -- 2. Simple static website (line 43)
 

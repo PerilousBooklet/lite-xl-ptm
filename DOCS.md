@@ -1,5 +1,11 @@
 # Documentation
 
+`ptm` can generate folder/file structures for single files and complex project templates.
+
+Single-file templates follow this convention: `(single)project_template_name`.
+
+Complex project templates do not require any name prefix.
+
 ## Table of Contents
 
 1. [Functions](#functions)
@@ -50,15 +56,24 @@ ptm.add_template() {
     ".dirr" .. "/" .. ".dirrr"
   },
   ext_libs = {
-    ["1.21.zip"] = {
+    {
       url = "https://github.com/FabricMC/fabric-example-mod/archive/refs/heads/1.21.zip",
-      path = ""
+      path = "",
+      filename = "1.21.zip"
     }
   },
   lsp_config_files = {
     [".something.cfg"] = {
       path = ".dirr" .. "/" .. ".dirrr",
       content = file2
+    }
+  },
+  -- WIP: insert dependencies into build tools' config files (?)
+  dependencies = {
+    {
+      url = "",
+      path = "",
+      filename = ""
     }
   },
   commands = {
