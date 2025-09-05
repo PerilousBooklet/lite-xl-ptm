@@ -62,14 +62,23 @@ local function create_and_fill_single_file(file_name, file_content)
 end
 
 -- Download remote file
--- WIP: fix, cannot set undefined var connection ...
-local agent = www.new()
-local function download_file(file, filename)
+-- TODO: add core.status_view:show_message(...)
+local function download_file(url, filename)
   local f = io.open(filename, "wb")
+  local agent = www.new()
   core.add_thread(function()
-    agent:get(file, {
+    agent:get(url, {
       response = function(response, chunk)
         f:write(chunk)
+      end,
+      -- FIX: message not shown
+      done = function()
+        f:close()
+        core.log("Downloaded: " .. filename)
+      end,
+      error = function(err)
+        f:close()
+        core.error("Download failed: " .. tostring(err))
       end
     })
   end)
@@ -86,19 +95,10 @@ local function generate_template(template_name, project_title, template_content)
   	create_and_fill_file(project_title, file.path, k, file.content)
   end
   -- Download external libraries
-  for k, lib in pairs(template_content.ext_libs) do
+  for _, lib in ipairs(template_content.ext_libs) do
     system.chdir(core.project_dir .. "/" .. project_title .. "/" .. lib.path)
-    -- FUTURE_TODO: Add download status in StatusView (use log messages)
-    -- WIP: commands should run only when the deps are finished downloading
-    -- EXAMPLE FROM ADAM:
-    -- core.add_thread(function()
-    --   local result1 = process.start({ "process1" }).stdout:read("*all")
-    --   local result2 = process.start({ "process2" }).stdout:read("*all")   
-    -- end)
-    core.add_thread(function ()
-    	process.start({ "wget", lib.url })
-    	-- download_file(lib.url, lib.filename)
-    end)
+    -- FIX: commands should run only when the deps are finished downloading
+    download_file(lib.url, lib.filename)
   end
   -- Create and fill config files for LSP servers
   for k, file in pairs(template_content.lsp_config_files) do

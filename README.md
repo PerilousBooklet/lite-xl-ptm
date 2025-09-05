@@ -9,18 +9,13 @@ A project template manager plugin for Lite XL.
 > [!NOTE]
 > At the moment this plugin is LINUX ONLY.
 
-> [!WARNING]
-> At the moment the functionality for downloading dependencies is broken, a FIX is WIP.
+## Quickstart
 
-## How to install
+To begin with, you'll need the [Lite XL package manager](https://github.com/lite-xl/lite-xl-plugin-manager?tab=readme-ov-file#installing).
 
-Install the [Lite XL package manager](https://github.com/lite-xl/lite-xl-plugin-manager?tab=readme-ov-file#installing).
+Then open the integrated terminal and run `lpm install ptm`.
 
-Run `lpm install ptm`.
-
-Load the template modules into Lite XL: 
-
-> `~/.config/lite-xl/init.lua`
+After that, write the following into `~/.config/lite-xl/init.lua`:
 
 ```lua
 local ptm = require "plugins.ptm"
@@ -29,5 +24,10 @@ ptm.load()
 
 ## Documentation
 
-<!-- TODO: write docs for how functions work -->
-You can find the documentation [here](./DOCS.md)
+`ptm` can generate folder/file structures for single files and complex project templates.
+
+Single-file templates follow the naming convention `(single)project_template_name`.
+
+Complex project templates do not require any name prefix, thus `project_template_name`.
+
+Here's the [reference template](https://github.com/PerilousBooklet/lite-xl-ptm/blob/main/templates/example.lua)
