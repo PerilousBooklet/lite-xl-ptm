@@ -7,7 +7,7 @@
       "description": "A project template manager plugin for Lite XL.",
       "path": ".",
       "type": "plugin",
-      "version": "0.4.1",
+      "version": "0.4.2",
       "dependencies": { "www": {}, "terminal": {} }
     }
   ]

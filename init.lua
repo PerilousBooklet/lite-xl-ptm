@@ -5,21 +5,19 @@ local command = require "core.command"
 local common = require "core.common"
 local config = require "core.config"
 local keymap = require "core.keymap"
+local style = require "core.style"
+
 local www = require "libraries.www"
 
+
 local ptm = {}
-
--- FUTURE_TODO: after PROJECT REWORK is complete, use core.root_project().path instead of core.project_dir
--- FIX: after creating a new project, you can't save currently opened files from current working dir
-
--- TODO: specify project template parameters (author name, url, ...; list of dependencies, specific remote file urls for dependencies, ...)
---       (just write all the arguments inside the commandview input field, but separate them with a specific character, es. ; or |)
---       (remember to explain somewhere (README ?) this functionality!!!)
 
 -- Configuration Options
 config.plugins.ptm = common.merge({
   -- ?
 }, config.plugins.ptm)
+
+-- FUTURE_TODO: after PROJECT REWORK is complete, use core.root_project().path instead of core.project_dir
 
 local templates = {}
 
@@ -61,8 +59,9 @@ local function create_and_fill_single_file(file_name, file_content)
   end
 end
 
+-- TODO: write task queue system to make sure commands run only after deps have finished downloading
+
 -- Download remote file
--- TODO: add core.status_view:show_message(...)
 local function download_file(url, filename)
   local f = io.open(filename, "wb")
   local agent = www.new()
@@ -85,9 +84,10 @@ local function download_file(url, filename)
 end
 
 -- Template generation
+-- FIX: after creating a new project, you can't save currently opened files from current working dir
 local function generate_template(template_name, project_title, template_content)
   -- Create directories
-  for k, dir in pairs(template_content.dirs) do
+  for _, dir in ipairs(template_content.dirs) do
   	system.mkdir(core.project_dir .. "/" .. project_title .. "/" .. dir .. "/")
   end
 	-- Create and fill files
@@ -97,7 +97,7 @@ local function generate_template(template_name, project_title, template_content)
   -- Download external libraries
   for _, lib in ipairs(template_content.ext_libs) do
     system.chdir(core.project_dir .. "/" .. project_title .. "/" .. lib.path)
-    -- FIX: commands should run only when the deps are finished downloading
+    core.status_view:show_message("i", style.text, "Downloading dependencies...")
     download_file(lib.url, lib.filename)
   end
   -- Create and fill config files for LSP servers
@@ -105,7 +105,7 @@ local function generate_template(template_name, project_title, template_content)
   	create_and_fill_file(project_title, file.path, k, file.content)
   end
   -- Run commands
-  for k, cmd in pairs(template_content.commands) do
+  for _, cmd in ipairs(template_content.commands) do
   	system.chdir(core.project_dir .. "/" .. project_title)
   	command.perform("terminal:execute", table.concat(cmd, " "))
   end
@@ -203,15 +203,9 @@ local function project_template_manager()
 end
 
 -- Command
-command.add(nil, {
-  ["ptm:choose-template"] = function ()
-    project_template_manager()
-  end
-})
+command.add(nil, { ["ptm:choose-template"] = function () project_template_manager() end })
 
 -- Key binding
-keymap.add {
-  ["alt+p"] = "ptm:choose-template"
-}
+keymap.add { ["alt+p"] = "ptm:choose-template" }
 
 return ptm
