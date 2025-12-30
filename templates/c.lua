@@ -2,7 +2,7 @@
 local ptm = require 'plugins.ptm'
 
 -- Templates:
--- 1. C, Tiny (line 7)
+-- 1. C, Tiny
 
 -- C, Tiny
 local file1 = [[

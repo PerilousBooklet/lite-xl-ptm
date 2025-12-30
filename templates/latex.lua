@@ -5,10 +5,10 @@ local ptm = require 'plugins.ptm'
 -- ?
 
 -- Templates:
--- 1. LaTeX, article (line 20)
--- 2. LaTeX, book (line 83)
--- 3. LaTeX, presentation (line )
--- 4. LaTeX, cv (line )
+-- 1. LaTeX, article
+-- 2. LaTeX, book
+-- 3. LaTeX, presentation
+-- 4. LaTeX, cv
 
 local file_run = [[
 pdflatex main.tex

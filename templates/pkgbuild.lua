@@ -2,7 +2,7 @@
 local ptm = require 'plugins.ptm'
 
 -- Templates
--- 1. PKGBUILD, Base (line 7)
+-- 1. PKGBUILD, Base
 -- TODO: 2. PKGBUILD, arch-chroot
 -- TODO: 3. PKGBUILD, arch-nspawn
 -- TODO: 4. PKGBUILD, arch-nspawn + auto-recursive-dependency-get (for AUR packages)

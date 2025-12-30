@@ -85,6 +85,8 @@ end
 
 -- Template generation
 -- FIX: after creating a new project, you can't save currently opened files from current working dir
+--      (the plugin changes the current project dir ?, you see it in the difference between 
+--       the terminal path and treeview top-level directory)
 local function generate_template(template_name, project_title, template_content)
   -- Create directories
   for _, dir in ipairs(template_content.dirs) do
@@ -181,6 +183,8 @@ local function project_template_manager()
         core.command_view:enter("Choose project title", {
           submit = function(project_title)
             -- TODO: prompt for more data (use one more commandview, use ; or | to separate arguments)
+            -- 1. I need the template folder name and the organization path (es. com.mycompany.example_app) for the Maven quickstart archetype
+            -- maybe a way to specify (in the template file) how many arguments to ask for ?
             -- Check if folder already exists
             if system.get_file_info(core.project_dir .. "/" .. project_title) == nil then
               select_template(template_name, project_title)
@@ -205,7 +209,7 @@ end
 -- Command
 command.add(nil, { ["ptm:choose-template"] = function () project_template_manager() end })
 
--- Key binding
+-- Keybind
 keymap.add { ["alt+p"] = "ptm:choose-template" }
 
 return ptm

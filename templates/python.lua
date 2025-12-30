@@ -2,8 +2,8 @@
 local ptm = require 'plugins.ptm'
 
 -- Templates:
--- 1. Python, Tiny (line 7)
--- 2. Python, Flask (line 50)
+-- 1. Python, Tiny
+-- 2. Python, Flask
 
 -- Python, Tiny
 local setup_tiny = [[

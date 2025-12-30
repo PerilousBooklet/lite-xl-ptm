@@ -2,7 +2,7 @@
 local ptm = require 'plugins.ptm'
 
 -- Templates:
--- 1. Lua, Tiny (line 7)
+-- 1. Lua, Tiny
 
 -- Lua, Tiny
 local setup_tiny = [[
@@ -33,7 +33,7 @@ export LUA_CPATH="$(pwd)/.luarocks/lib/lua/5.4/?.so"
 lua main.lua
 ]]
 local lua_main_tiny = [[
-print(Hello there!)
+print("Hello there!")
 ]]
 
 ptm.add_template() {

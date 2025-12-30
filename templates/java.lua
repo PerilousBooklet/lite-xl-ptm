@@ -2,50 +2,137 @@
 local ptm = require 'plugins.ptm'
 
 -- Templates:
--- 1. Java, Tiny (line 17)
--- 2. Java, Simple (line 57)
--- 3. Java, Gradle (line 116)
--- 4. Java, Maven, Quickstart (line 156)
+-- 2. Java, Simple, App 
+-- 2. Java, Simple, Library
+-- 3. Java, Maven, Quickstart
+-- 4. Java, Gradle
 
-local readme = [[
-# Java Project
+local lite_project = [[
+local core = require "core"
+local config = require "core.config"
 
-...
-
+table.insert(config.ignore_files, "^%.jtls$")
+table.insert(config.ignore_files, "./*/.jdtls/")
+table.insert(config.ignore_files, "src/target/")
 ]]
 
--- Java, Tiny
-local run_tiny = [[
+
+-- Java, Simple, App
+-- NOTE: the square brackets in the [[  ]] bash expressions must be excluded with \
+-- TODO: add test.sh
+-- TODO: add debug.sh
+-- TODO: add profile.sh
+local run_simple_app = [=[
 #!/bin/bash
-javac -d bin *.java
-java -cp bin Main
-rm -v bin/*
-]]
 
-local java_main_tiny = [[
+JAVA_VERSION=25
+AUTHOR='PerilousBooklet'
+VERSION='0.0.1'
+JAR_FILE='app.jar'
+RESOURCES=(
+  'assets/'
+)
+
+# Init
+if [[ ! -d ./bin ]]; then
+  mkdir -v ./bin
+fi
+if [[ ! -d ./lib ]]; then
+  mkdir -v ./lib
+fi
+
+# Create Manifest file
+cat << EOT > Manifest.txt
+Manifest-Version: $VERSION
+Created-By: $AUTHOR
+Main-Class: main.Main
+EOT
+
+# Generate list of third-party dependencies
+DEPS=$(echo $(find ./lib/*.jar | sed -e 's|^./||g'))
+
+# Build source code
+/usr/lib/jvm/java-$JAVA_VERSION-openjdk/bin/javac \
+  --class-path "$DEPS" \
+  -d bin \
+  $(find src -name "*.java")
+
+# Update Manifest file with entried for libs and resources
+echo -e "Class-Path: $DEPS ${RESOURCES[*]}\n" >> Manifest.txt
+
+# Include resource files
+if [[ -d assets ]]; then
+  mkdir -vp bin/assets/
+  cp -vr assets/* bin/assets/
+fi
+
+# Create jar file
+if [[ -f $JAR_FILE ]]; then
+  jar \
+    --verbose \
+    --update \
+    --file $JAR_FILE \
+    --manifest Manifest.txt \
+    -C bin \
+    .
+else
+  jar \
+    --verbose \
+    --create \
+    --file $JAR_FILE \
+    --manifest Manifest.txt \
+    -C bin \
+    .
+fi
+
+# Run app
+/usr/lib/jvm/java-$JAVA_VERSION-openjdk/bin/java -jar $JAR_FILE
+
+# Clean build files
+rm -vrf bin/*
+rm -v $JAR_FILE
+]=]
+
+local main_simple_app = [[
+package main;
+
 public class Main {
   
   public static void main(String[] args) {
-    System.out.println("Hello there.");
+    System.out.println("Hello World!");
   }
+  
 }
 ]]
 
 ptm.add_template() {
-  name = "java-tiny",
-  desc = "A tiny template for quickly testing or running tiny Java programs.",
+  name = "java-simple-app",
+  desc = "A simple, from-scratch template for a Java application.",
   files = {
+    ["README.md"] = {
+      content = "",
+      path = ""
+    },
     ["run.sh"] = {
-      content = run_tiny,
+      content = run_simple_app,
       path = ""
     },
     ["Main.java"] = {
-      content = java_main_tiny,
+      content = main_simple_app,
+      path = "src" .. "/" .. "main"
+    },
+    [".lite_project.lua"] = {
+      content = lite_project,
       path = ""
     }
   },
   dirs = {
-    "bin"
+    "src",
+    "src" .. "/" .. "main",
+    "bin",
+    "lib",
+    "assets",
+    "docs"
   },
   ext_libs = {},
   lsp_config_files = {},
@@ -54,62 +141,92 @@ ptm.add_template() {
   }
 }
 
--- Java, Simple
-local build_simple = [[
+-- Java, Simple, Library
+-- NOTE: the square brackets in the [[  ]] bash expressions must be excluded with \
+-- TODO: add mock project template to test the library
+local run_simple_library = [=[
 #!/bin/bash
 
-# Compile Main.java into Main.class
-javac Main.java
+JAVA_VERSION=25
+AUTHOR='PerilousBooklet'
+VERSION='0.0.1'
+JAR_FILE='lib1.jar'
 
-# Create .jar archive from Main.Class as indicated by Manifest.txt
-jar -cfm Main.jar Manifest.txt Main.class
+# Init
+if [[ ! -d ./bin ]]; then
+  mkdir -v ./bin
+fi
+if [[ ! -d ./lib ]]; then
+  mkdir -v ./lib
+fi
 
-# Run .jar executable archive
-java -jar Main.jar
-]]
+# Create Manifest file
+cat << EOT > Manifest.txt
+Manifest-Version: $VERSION
+Created-By: $AUTHOR
+EOT
 
-local main_simple = [[
-public class Main {
-  public static void main(string[] args) {
-    System.out.println("Hello World!")
-  }
-}
-]]
+# Generate list of third-party dependencies
+DEPS=$(echo $(find ./lib/*.jar | sed -e 's|^./||g'))
 
-local manifest_simple = [[
-Main-Class: Main
+# Build source code
+/usr/lib/jvm/java-$JAVA_VERSION-openjdk/bin/javac \
+  --class-path "$DEPS" \
+  -d bin \
+  $(find src -name "*.java")
 
-]]
+echo -e "Class-Path: $DEPS ${RESOURCES[*]}\n" >> Manifest.txt
+
+# Create jar file
+if [[ -f $JAR_FILE ]]; then
+  jar \
+    --verbose \
+    --update \
+    --file $JAR_FILE \
+    --manifest Manifest.txt \
+    -C bin \
+    .
+else
+  jar \
+    --verbose \
+    --create \
+    --file $JAR_FILE \
+    --manifest Manifest.txt \
+    -C bin \
+    .
+fi
+
+# Clean build files
+rm -vrf bin/*
+]=]
 
 ptm.add_template() {
-  name = "java-simple",
-  desc = "A single-file template for Java.",
+  name = "java-simple-library",
+  desc = "A simple, from-scratch template for a Java library.",
   files = {
     ["README.md"] = {
-      content = readme,
+      content = "",
       path = ""
     },
-    ["build.sh"] = {
-      content = build_simple,
+    ["run.sh"] = {
+      content = run_simple_library,
       path = ""
     },
-    ["Main.java"] = {
-      content = main_simple,
+    [".lite_project.lua"] = {
+      content = lite_project,
       path = ""
-    },
-    ["Manifest.txt"] = {
-      content = manifest_simple,
-      path = ""
-    },
+    }
   },
   dirs = {
+    "src",
     "bin",
-    "lib"
+    "lib",
+    "docs"
   },
   ext_libs = {},
   lsp_config_files = {},
   commands = {
-    { "chmod", "+x", "build.sh" }
+    { "chmod", "+x", "run.sh" }
   }
 }
 
@@ -129,7 +246,7 @@ ptm.add_template() {
   desc = "",
   files = {
     ["README.md"] = {
-      content = readme,
+      content = "",
       path = ""
     },
     ["build.sh"] = {
@@ -138,6 +255,10 @@ ptm.add_template() {
     },
     ["run.sh"] = {
       content = run_gradle,
+      path = ""
+    },
+    [".lite_project.lua"] = {
+      content = lite_project,
       path = ""
     }
   },
@@ -157,32 +278,33 @@ ptm.add_template() {
 local setup_maven_quickstart = [[
 #!/usr/bin/bash
 
-# Generate base project
+# Base project
 mvn -B archetype:generate \
-    -DgroupId=com.perilousbooklet.app \
-    -DartifactId=src \
+    -DgroupId=com.mycompany \
+    -DartifactId=example \
     -DarchetypeArtifactId=maven-archetype-quickstart \
     -DarchetypeVersion=1.4
 
-# FIX
+# Fix
 sed -i 's/<maven.compiler.source>1.7/<maven.compiler.source>1.8/g' ./src/pom.xml
 sed -i 's/<maven.compiler.target>1.7/<maven.compiler.target>1.8/g' ./src/pom.xml
 
-# Create and fill build script
+# Build script
 touch ./src/build.sh
 cat << EOT > ./src/build.sh
 #!/usr/bin/bash
+mvn clean
 mvn compile
 mvn test
-mvn clean
 mvn package
-mvn exec:java -Dexec.mainClass="com.perilousbooklet.app.App"
+mvn exec:java -Dexec.mainClass="com.mycompany.example.App"
 EOT
 chmod +x ./src/build.sh
 ]]
+-- TODO: see todo at line 199
 local run_maven_quickstart = [[
 #!/usr/bin/bash
-cd ./src || exit
+cd ./example || exit
 ./build.sh
 ]]
 
@@ -191,15 +313,20 @@ ptm.add_template() {
   desc = "Maven quickstart template.",
   files = {
     ["README.md"] = {
-      content = readme,
+      content = "",
       path = ""
     },
     ["setup.sh"] = {
+      -- TODO: replace "example" with replacement tag and use string.gsub to replace it with given project name
       content = setup_maven_quickstart,
       path = ""
     },
     ["run.sh"] = {
       content = run_maven_quickstart,
+      path = ""
+    },
+    [".lite_project.lua"] = {
+      content = lite_project,
       path = ""
     }
   },

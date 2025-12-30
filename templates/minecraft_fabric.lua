@@ -103,7 +103,7 @@ for _, v in pairs(mdks) do
     commands = {
       -- Wait until the archive is fully downloaded
       -- FIX: the command table gets run without waiting for wget to finish downloading the deps
-      { "sleep 10" },
+      { "sleep 20" },
       -- Setup mod development kit
       { "unzip", string.format("%s.zip", fabric_ver) },
       { "mv", string.format("fabric-example-mod-%s", fabric_ver), "src" },
