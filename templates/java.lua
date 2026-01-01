@@ -22,13 +22,13 @@ table.insert(config.ignore_files, "src/target/")
 -- TODO: add test.sh
 -- TODO: add debug.sh
 -- TODO: add profile.sh
-local run_simple_app = [=[
+local run_simple_app = [==[
 #!/bin/bash
 
 JAVA_VERSION=25
 AUTHOR='PerilousBooklet'
 VERSION='0.0.1'
-JAR_FILE='app.jar'
+JAR_FILE='game.jar'
 RESOURCES=(
   'assets/'
 )
@@ -41,6 +41,16 @@ if [[ ! -d ./lib ]]; then
   mkdir -v ./lib
 fi
 
+# List all third-party libraries
+DEPS=$(echo $(find ./lib/*.jar | sed -e 's|^./||g'))
+
+# Build source code
+DEPS_FOR_JAVAC=$(echo $DEPS | sed 's| |:|g')
+/usr/lib/jvm/java-$JAVA_VERSION-openjdk/bin/javac \
+  --class-path "$DEPS_FOR_JAVAC" \
+  -d bin \
+  $(find src -name "*.java")
+
 # Create Manifest file
 cat << EOT > Manifest.txt
 Manifest-Version: $VERSION
@@ -48,23 +58,28 @@ Created-By: $AUTHOR
 Main-Class: main.Main
 EOT
 
-# Generate list of third-party dependencies
-DEPS=$(echo $(find ./lib/*.jar | sed -e 's|^./||g'))
-
-# Build source code
-/usr/lib/jvm/java-$JAVA_VERSION-openjdk/bin/javac \
-  --class-path "$DEPS" \
-  -d bin \
-  $(find src -name "*.java")
-
-# Update Manifest file with entried for libs and resources
-echo -e "Class-Path: $DEPS ${RESOURCES[*]}\n" >> Manifest.txt
-
 # Include resource files
 if [[ -d assets ]]; then
   mkdir -vp bin/assets/
-  cp -vr assets/* bin/assets/
 fi
+cp -vr assets/* bin/assets/
+
+# Update Manifest.txt with list of third-party dependencies and resource folders
+if [[ $(find ./lib -type d -empty) == "./lib" ]]; then
+  echo -e "\e[32m[INFO]\e[0m ./lib is empty"
+else
+  echo -e "Class-Path: " >> Manifest.txt
+  for i in $DEPS; do
+    printf '  %s\n' "$i" >> Manifest.txt
+  done
+  for i in "${RESOURCES[@]}"; do
+    printf '  %s\n' "$i" >> Manifest.txt
+  done
+  echo "" >> Manifest.txt
+fi
+
+# Include third-party libraries
+cp -v lib/*.jar bin/
 
 # Create jar file
 if [[ -f $JAR_FILE ]]; then
@@ -90,8 +105,7 @@ fi
 
 # Clean build files
 rm -vrf bin/*
-rm -v $JAR_FILE
-]=]
+]==]
 
 local main_simple_app = [[
 package main;
@@ -150,7 +164,10 @@ local run_simple_library = [=[
 JAVA_VERSION=25
 AUTHOR='PerilousBooklet'
 VERSION='0.0.1'
-JAR_FILE='lib1.jar'
+JAR_FILE='lib.jar'
+RESOURCES=(
+  'assets/'
+)
 
 # Init
 if [[ ! -d ./bin ]]; then
@@ -160,22 +177,44 @@ if [[ ! -d ./lib ]]; then
   mkdir -v ./lib
 fi
 
+# List all third-party libraries
+DEPS=$(echo $(find ./lib/*.jar | sed -e 's|^./||g'))
+
+# Build source code
+DEPS_FOR_JAVAC=$(echo $DEPS | sed 's| |:|g')
+/usr/lib/jvm/java-$JAVA_VERSION-openjdk/bin/javac \
+  --class-path "$DEPS_FOR_JAVAC" \
+  -d bin \
+  $(find src -name "*.java")
+
 # Create Manifest file
 cat << EOT > Manifest.txt
 Manifest-Version: $VERSION
 Created-By: $AUTHOR
 EOT
 
-# Generate list of third-party dependencies
-DEPS=$(echo $(find ./lib/*.jar | sed -e 's|^./||g'))
+# Include resource files
+if [[ -d assets ]]; then
+  mkdir -vp bin/assets/
+fi
+cp -vr assets/* bin/assets/
 
-# Build source code
-/usr/lib/jvm/java-$JAVA_VERSION-openjdk/bin/javac \
-  --class-path "$DEPS" \
-  -d bin \
-  $(find src -name "*.java")
+# Update Manifest.txt with list of third-party dependencies and resource folders
+if [[ $(find ./lib -type d -empty) == "./lib" ]]; then
+  echo -e "\e[32m[INFO]\e[0m ./lib is empty"
+else
+  echo -e "Class-Path: " >> Manifest.txt
+  for i in $DEPS; do
+    printf '  %s\n' "$i" >> Manifest.txt
+  done
+  for i in "${RESOURCES[@]}"; do
+    printf '  %s\n' "$i" >> Manifest.txt
+  done
+  echo "" >> Manifest.txt
+fi
 
-echo -e "Class-Path: $DEPS ${RESOURCES[*]}\n" >> Manifest.txt
+# Include third-party libraries
+cp -v lib/*.jar bin/
 
 # Create jar file
 if [[ -f $JAR_FILE ]]; then
@@ -196,12 +235,15 @@ else
     .
 fi
 
+# Run app
+/usr/lib/jvm/java-$JAVA_VERSION-openjdk/bin/java -jar $JAR_FILE
+
 # Clean build files
 rm -vrf bin/*
 ]=]
 
 ptm.add_template() {
-  name = "java-simple-library",
+  name = "java-simple-lib",
   desc = "A simple, from-scratch template for a Java library.",
   files = {
     ["README.md"] = {
