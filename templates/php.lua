@@ -1,10 +1,6 @@
 -- mod-version:3
 local ptm = require 'plugins.ptm'
 
--- Templates:
--- 1. PHP, Simple Webapp
-
--- PHP, Simple Webapp
 local file1 = [[
 #!/bin/bash
 cd "./src" || exit

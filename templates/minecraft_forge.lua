@@ -2,7 +2,7 @@
 local core = require "core"
 local ptm = require 'plugins.ptm'
 
-local file0 = [[
+local readme = [[
 # Example Mod
 
 ...
@@ -81,7 +81,7 @@ for _, v in pairs(mdks) do
     files = {
       ["README.md"] = {
         path = "",
-        content = file0
+        content = readme
       },
       ["run.sh"] = {
         path = "",

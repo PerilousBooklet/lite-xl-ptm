@@ -1,11 +1,7 @@
 -- mod-version:3
 local ptm = require 'plugins.ptm'
 
--- Templates:
--- 1. Lua, Tiny
-
--- Lua, Tiny
-local setup_tiny = [[
+local setup = [[
 #!/bin/bash
 
 # TO INSTALL A LUA MODULE
@@ -25,14 +21,16 @@ luarocks install --local --tree=.luarocks luasec
 luarocks install --local --tree=.luarocks http
 luarocks install --local --tree=.luarocks dkjson
 ]]
-local run_tiny = [[
+
+local run = [[
 #!/bin/bash
 export LUA_PATH="$(pwd)/.luarocks/share/lua/5.4/?.lua"
 export LUA_CPATH="$(pwd)/.luarocks/lib/lua/5.4/?.so"
 # luarocks path
 lua main.lua
 ]]
-local lua_main_tiny = [[
+
+local main = [[
 print("Hello there!")
 ]]
 
@@ -41,15 +39,15 @@ ptm.add_template() {
   desc = "A tiny template for quickly testing or running tiny Lua programs.",
   files = {
     ["setup.sh"] = {
-      content = setup_tiny,
+      content = setup,
       path = ""
     },
     ["run.sh"] = {
-      content = run_tiny,
+      content = run,
       path = ""
     },
     ["main.lua"] = {
-      content = lua_main_tiny,
+      content = main,
       path = ""
     }
   },

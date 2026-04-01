@@ -10,12 +10,25 @@ local style = require "core.style"
 local www = require "libraries.www"
 
 
+-------
+-- ? --
+-------
+
 local ptm = {}
 
--- Configuration Options
+
+---------------------------
+-- Configuration Options --
+---------------------------
+
 config.plugins.ptm = common.merge({
   -- ?
 }, config.plugins.ptm)
+
+
+----------
+-- Core --
+----------
 
 -- FUTURE_TODO: after PROJECT REWORK is complete, use core.root_project().path instead of core.project_dir
 
@@ -140,6 +153,11 @@ local function select_single_file_template(template_name)
   end
 end
 
+
+------------------
+-- Data Storage --
+------------------
+
 -- Add a template table to the templates table
 function ptm.add_template()
 	return function (t)
@@ -166,10 +184,15 @@ function ptm.load()
   -- Load template files
   for _, v in ipairs(templates_list) do
     require("plugins.ptm.templates." .. v)
+    core.log("Loaded ptm module: " .. v)
   end
 end
 
--- Main
+
+----------
+-- Main --
+----------
+
 local function project_template_manager()
   -- Get input for template name
   core.command_view:enter("Choose template", {
@@ -206,10 +229,25 @@ local function project_template_manager()
   })
 end
 
--- Command
+
+--------------
+-- Commands --
+--------------
+
 command.add(nil, { ["ptm:choose-template"] = function () project_template_manager() end })
 
--- Keybind
+
+-----------------
+-- Keybindings --
+-----------------
+
 keymap.add { ["alt+p"] = "ptm:choose-template" }
+
+
+-------
+-- ? --
+-------
+
+core.add_thread(function() ptm.load() end)
 
 return ptm

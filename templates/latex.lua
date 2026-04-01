@@ -1,15 +1,6 @@
 -- mod-version:3
 local ptm = require 'plugins.ptm'
 
--- Template Reference
--- ?
-
--- Templates:
--- 1. LaTeX, article
--- 2. LaTeX, book
--- 3. LaTeX, presentation
--- 4. LaTeX, cv
-
 local file_run = [[
 pdflatex main.tex
 pdflatex main.tex
@@ -80,9 +71,8 @@ ptm.add_template() {
   }
 }
 
--- LaTeX, book
+-- TODO: book
+-- TODO: presentation
+-- TODO: cv
 
--- LaTeX, presentation
-
--- LaTeX, cv
-
+-- TODO: TeX, ?

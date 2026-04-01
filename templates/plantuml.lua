@@ -4,8 +4,21 @@ local ptm = require 'plugins.ptm'
 -- Template Reference
 -- https://plantuml.com/
 
--- Templates:
--- 1. PlantUML, UML diagram (sequence, usecase, class, activity, component, statemachine, object, deployment, timing, network, archimate)
+-- Templates
+
+-- 1. PlantUML, UML diagram
+-- - sequence
+-- - usecase
+-- - class
+-- - activity
+-- - component
+-- - statemachine
+-- - object
+-- - deployment
+-- - timing
+-- - network
+-- - archimate
+
 -- 2. PlantUML, ER Diagram
 -- 3. PlantUML, RegEx
 -- 4. PlantUML, Wirefrane
@@ -33,7 +46,7 @@ skinparam dpi 200
 ]]
 
 ptm.add_template() {
-  name = "plantuml-uml-diagram",
+  name = "plantuml-uml",
   desc = "A basic template for PlantUML UML diagrams.",
   files = {
     ["run.sh"] = {
@@ -83,21 +96,13 @@ ptm.add_template() {
   }
 }
 
+
 -- TODO: PlantUML, RegEx
-
 -- TODO: PlantUML, Wirefrane
-
 -- TODO: PlantUML, Gantt
-
 -- TODO: PlantUML, Chronology
-
 -- TODO: PlantUML, Mindmap
-
 -- TODO: PlantUML, WBS
-
 -- TODO: PlantUML, EBNF
-
 -- TODO: PlantUML, JSON
-
 -- TODO: PlantUML, YAML
-

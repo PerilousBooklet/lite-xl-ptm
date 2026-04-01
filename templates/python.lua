@@ -1,36 +1,33 @@
 -- mod-version:3
 local ptm = require 'plugins.ptm'
 
--- Templates:
--- 1. Python, Tiny
--- 2. Python, Flask
-
--- Python, Tiny
-local setup_tiny = [[
+local setup = [[
 #!/bin/bash
 python -v -m venv .venv
 source .venv/bin/activate
 pip install ?
 ]]
-local run_tiny = [[
+
+local run = [[
 #!/bin/bash
 source .venv/bin/activate
 python main.py
 ]]
-local python_main_tiny = [[
+
+local main = [[
 print("Hello there!")
 ]]
 
 ptm.add_template {
-  name = "python-tiny",
-  desc = "", 
+  name = "python",
+  desc = "",
   files = {
     ["setup.sh"] = {
-      content = setup_tiny,
+      content = setup,
       path = ""
     },
     ["run.sh"] = {
-      content = run_tiny,
+      content = run,
       path = ""
     },
     ["main.py"] = {
@@ -46,6 +43,3 @@ ptm.add_template {
     }
   }
 }
-
--- WIP: 2. Python, Flask
-
