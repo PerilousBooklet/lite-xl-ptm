@@ -9,6 +9,9 @@ local style = require "core.style"
 
 local www = require "libraries.www"
 
+-- REVIEW: remove unnecessary comments
+-- REVIEW: full code review
+
 -------
 -- ? --
 -------
@@ -110,6 +113,7 @@ end
 -- Also guards against `f` being nil (e.g. if the destination directory
 -- doesn't exist), which previously would throw inside the response
 -- callback instead of failing gracefully.
+-- FIX: download is broken
 local function download_file(url, filename, on_done)
   local f = io.open(filename, "wb")
   if not f then
